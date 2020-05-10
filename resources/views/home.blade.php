@@ -1,9 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <dashboard></dashboard>
-    </div>
-</div>
+<v-app>
+    <v-content>
+        <div id="app">
+            <router-view />
+        </div>
+    </v-content>
+</v-app>
 @endsection

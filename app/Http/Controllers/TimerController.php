@@ -43,6 +43,11 @@ class TimerController extends Controller
         return $timer;
     }
 
+    public function delete(int $id)
+    {
+        return Timer::mine()->find($id)->delete();
+    }
+
     public function running()
     {
         return Timer::mine()->running()->first() ?? [];

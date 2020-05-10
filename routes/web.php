@@ -18,6 +18,7 @@ Route::redirect('/', '/home');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/timers', 'TimerController@index');
 Route::post('/timers', 'TimerController@store');
+Route::delete('/timers/{id}', 'TimerController@delete');
 Route::post('/timers/stop', 'TimerController@stopRunning');
 Route::get('/timers/active', 'TimerController@running');
 Route::get('/categories', 'CategoryController@index');
