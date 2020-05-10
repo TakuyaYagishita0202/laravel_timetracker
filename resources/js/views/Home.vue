@@ -677,15 +677,13 @@ export default {
      * タイマーを削除
      */
     deleteTimer() {
-      console.log(
-        `削除対象はTimerテーブルのid:${this.editTimer.id}の${this.editTimer.name}です。`
-      );
-      // idを受け取って論理削除を実装する
-      // window.axios
-      //     .delete(`/timers/${this.editTimer.id}`)
-      //     .then(response => this.categories = response.data);
-      this.editTimerDialog = false;
-      this.deleteTimerSnackbar = true;
+      // 必要な場合は論理削除を実装
+      window.axios.delete(`/timers/${this.editTimer.id}`).then(response => {
+        const deletedTimer = response.data;
+        this.timers = this.timers.filter(timer => timer.id !== deletedTimer.id);
+        this.editTimerDialog = false;
+        this.deleteTimerSnackbar = true;
+      });
     },
 
     /**

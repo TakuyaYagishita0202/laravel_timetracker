@@ -30,22 +30,24 @@ class TimerController extends Controller
             'category_color' => 'nullable'
         ]);
         $timer = Timer::mine()->create([
-                'name' => $data['name'],
-                'memo' => $data['memo'],
-                'category_id' => $data['category_id'],
-                'category_name' => $data['category_name'],
-                'category_color' => $data['category_color'],
-                'user_id' => Auth::user()->id,
-                'started_at' => new Carbon,
-                'stopped_at' => null,
-            ]);
+            'name' => $data['name'],
+            'memo' => $data['memo'],
+            'category_id' => $data['category_id'],
+            'category_name' => $data['category_name'],
+            'category_color' => $data['category_color'],
+            'user_id' => Auth::user()->id,
+            'started_at' => new Carbon,
+            'stopped_at' => null,
+        ]);
 
         return $timer;
     }
 
     public function delete(int $id)
     {
-        return Timer::mine()->find($id)->delete();
+        $timer = Timer::mine()->find($id);
+        $timer->delete();
+        return $timer;
     }
 
     public function running()
