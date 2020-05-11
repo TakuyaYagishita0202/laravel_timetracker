@@ -43,6 +43,37 @@ class TimerController extends Controller
         return $timer;
     }
 
+    public function save(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|max:30',
+            'memo' => 'nullable|max:140',
+            'category_id' => 'nullable',
+            'category_name' => 'nullable|max:20',
+            'category_color' => 'nullable',
+            'started_at' => 'required',
+            'stopped_at' => 'required'
+        ]);
+
+        $started_at = new Carbon($data['started_at']);
+        $started_at->addHour(9);
+        $stopped_at = new Carbon($data['stopped_at']);
+        $stopped_at->addHour(9);
+
+        $timer = Timer::mine()->create([
+            'name' => $data['name'],
+            'memo' => $data['memo'],
+            'category_id' => $data['category_id'],
+            'category_name' => $data['category_name'],
+            'category_color' => $data['category_color'],
+            'user_id' => Auth::user()->id,
+            'started_at' => $started_at,
+            'stopped_at' => $stopped_at,
+        ]);
+
+        return $timer;
+    }
+
     public function update(Request $request, int $id)
     {
         $data = $request->validate([
