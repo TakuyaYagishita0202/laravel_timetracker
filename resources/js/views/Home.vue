@@ -342,9 +342,9 @@
                 <!-- 開始時刻入力 -->
                 <v-col cols="12">
                   <v-datetime-picker
-                    v-model="editTimer.datetime"
+                    v-model="editTimer.started_at"
                     :text-field-props="textFieldProps"
-                    label="開始日時 / 計測期間*"
+                    label="開始日時* / 計測期間*"
                   >
                     <template slot="dateIcon">
                       <v-icon>mdi-calendar</v-icon>
@@ -427,7 +427,7 @@
                                     editTimer.category === '' ||
                                     (editTimer.memo &&
                                         editTimer.memo.length > 140) ||
-                                    editTimer.datetime === ''
+                                    editTimer.started_at === '' || editTimer.stopped_at === ''
                             "
             >SAVE</v-btn>
           </v-card-actions>
@@ -472,8 +472,11 @@ export default {
         id: "",
         name: "",
         category_name: "",
+        category_id: "",
+        category_color: "",
         memo: "",
-        datetime: new Date(),
+        started_at: new Date(),
+        stopped_at: "",
         time: { hours: "", minutes: "", seconds: "" }
       },
       newCategoryColor: "#1CA085",
@@ -638,19 +641,21 @@ export default {
     },
 
     /**
-     * カテゴリーを編集
+     * タイマー編集用のダイアログを表示
      */
     openEditTimer(item) {
-      //以下仕様変更の必要あり
+      //以下調整
       this._arrayHours();
       this._arrayMinutes();
 
       this.editTimer.id = item.id;
       this.editTimer.name = item.name;
+      this.editTimer.category_id = item.category_id;
       this.editTimer.category_name = item.category_name;
+      this.editTimer.category_color = item.category_color;
       this.editTimer.memo = item.memo;
 
-      this.editTimer.datetime = new Date(item.started_at);
+      this.editTimer.started_at = new Date(item.started_at);
 
       // 計測期間
       const started = moment(item.started_at);
@@ -662,6 +667,14 @@ export default {
       this.editTimer.time.minutes = parseInt(time.minutes);
       this.editTimer.time.seconds = parseInt(time.seconds);
 
+      this.editTimer.stopped_at = moment(this.editTimer.started_at)
+        .add({
+          h: this.editTimer.time.hours,
+          m: this.editTimer.time.minutes,
+          s: this.editTimer.time.seconds
+        })
+        .toDate();
+
       this.editTimerDialog = true;
     },
 
@@ -669,21 +682,47 @@ export default {
      * タイマーを更新
      */
     updateTimer() {
-      this.editTimerDialog = false;
-      this.updateTimerSnackbar = true;
+      window.axios
+        .post(`/timers/${this.editTimer.id}/update`, {
+          name: this.editTimer.name,
+          memo: this.editTimer.memo,
+          category_id: this.editTimer.category_id,
+          category_name: this.editTimer.category_name,
+          category_color: this.editTimer.category_color,
+          started_at: this.editTimer.started_at,
+          stopped_at: this.editTimer.stopped_at
+        })
+        .then(response => {
+          const updatedTimer = response.data;
+          const timer = this.timers.find(
+            timer => timer.id === updatedTimer["id"]
+          );
+          timer.name = this.editTimer.name;
+          timer.category_id = this.editTimer.category_id;
+          timer.category_name = this.editTimer.category_name;
+          timer.category_color = this.editTimer.category_color;
+          timer.started_at = updatedTimer["started_at"];
+          timer.stopped_at = updatedTimer["stopped_at"];
+          this.editTimerDialog = false;
+          this.updateTimerSnackbar = true;
+        });
     },
 
     /**
      * タイマーを削除
      */
     deleteTimer() {
-      // 必要な場合は論理削除を実装
-      window.axios.delete(`/timers/${this.editTimer.id}`).then(response => {
-        const deletedTimer = response.data;
-        this.timers = this.timers.filter(timer => timer.id !== deletedTimer.id);
-        this.editTimerDialog = false;
-        this.deleteTimerSnackbar = true;
-      });
+      // 物理削除
+      window.axios
+        .delete(`/timers/${this.editTimer.id}/delete`)
+        .then(response => {
+          const deletedTimer = response.data;
+          this.timers = this.timers.filter(
+            timer => timer.id !== deletedTimer.id
+          );
+          this.editTimerDialog = false;
+          this.deleteTimerSnackbar = true;
+        });
     },
 
     /**
@@ -720,6 +759,7 @@ export default {
       }
       return false; //値は空ではない
     },
+
     /**
      * 時分秒の配列を生成
      */
@@ -735,7 +775,14 @@ export default {
         this.time.minutes.push(i);
         this.time.seconds.push(i);
       }
-    }
+    },
+
+    /**
+     * editTimer.stopped_at計算用
+     */
+    // calculateStoppedAt(){
+        
+    // }
   },
   computed: {
     /**
@@ -751,6 +798,34 @@ export default {
         borderRadius: menu ? "50%" : "4px",
         transition: "border-radius 200ms ease-in-out"
       };
+    }
+  },
+  watch: {
+    /**
+     * editTimer.stopped_at計算用
+     */
+    "editTimer.time": {
+      handler: function(val, oldVal) {
+        this.editTimer.stopped_at = moment(this.editTimer.started_at)
+          .add({
+            h: this.editTimer.time.hours,
+            m: this.editTimer.time.minutes,
+            s: this.editTimer.time.seconds
+          })
+          .toDate();
+      },
+      deep: true
+    },
+    "editTimer.started_at": {
+      handler: function(val, oldVal) {
+        this.editTimer.stopped_at = moment(this.editTimer.started_at)
+          .add({
+            h: this.editTimer.time.hours,
+            m: this.editTimer.time.minutes,
+            s: this.editTimer.time.seconds
+          })
+          .toDate();
+      },
     }
   }
 };
