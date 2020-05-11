@@ -26,7 +26,7 @@
 
     <!-- 右下部Snackbar -->
     <!-- タイマー開始ボタン -->
-    <v-hover v-slot:default="{ hover }" v-if="isEmpty(counter.timer)">
+    <v-hover v-slot:default="{ hover }" v-if="isEmpty(counter.timer.name)">
       <v-fab-transition>
         <v-btn
           @click.stop="newTimerDialog = true"
@@ -47,12 +47,12 @@
     <!-- 計算中タイマー -->
     <div v-if="!isEmpty(timers)">
       <v-snackbar v-model="snackbar" right :timeout="0" :multi-line="true">
-        <strong class="timer-name">{{ timers[0].name }}</strong>
+        <strong class="timer-name">{{ counter.timer.name }}</strong>
 
         <span
           class="ml-2 mr-4"
           :style="{
-                        backgroundColor: timers[0].category_color
+                        backgroundColor: counter.timer.category_color
                     }"
           style="display: inline-block; height:10px; width:10px; border-radius:50%"
         ></span>
@@ -482,7 +482,8 @@ export default {
       newCategoryColor: "#1CA085",
       newCategoryName: "",
       activeTimerString: "Calculating...",
-      counter: { seconds: 0, timer: null },
+      activeTimerId: "",
+      counter: { seconds: 0, timer: { name: "", category: "" } },
       requireRule: [value => !!value || "入力してください。"],
       newTimerNameRules: [
         value => !!value || "入力してください。",
@@ -512,6 +513,7 @@ export default {
       window.axios.get("/timers/active").then(response => {
         if (response.data.id !== undefined) {
           this.startTimer(response.data);
+          this.activeTimerId = response.data.id;
         }
       });
     });
@@ -584,13 +586,16 @@ export default {
     stopTimer: function() {
       window.axios.post(`/timers/stop`).then(response => {
         // Stop the activeTimer
-        this.timers[0].stopped_at = response.data.stopped_at;
+        const activeTimer = this.timers.find(
+          timer => timer.id === this.counter.timer.id
+        );
+        activeTimer.stopped_at = response.data.stopped_at;
 
         // Stop the ticker
         clearInterval(this.counter.ticker);
 
         // Reset the counter and timer string
-        this.counter = { seconds: 0, timer: null };
+        this.counter = { seconds: 0, timer: { name: "", category: "" } };
         this.activeTimerString = "Calculating...";
 
         this.snackbar = false;
@@ -698,7 +703,7 @@ export default {
             timer => timer.id === updatedTimer["id"]
           );
 
-          // 更新前と更新後の日付データを取得
+          // 更新前と更新後の日付データを予め取得
           const startedBefore = moment(timer.started_at);
           const startedAfter = moment(new Date(updatedTimer["started_at"]));
 

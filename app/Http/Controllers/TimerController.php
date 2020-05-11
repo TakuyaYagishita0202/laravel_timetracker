@@ -43,7 +43,7 @@ class TimerController extends Controller
         return $timer;
     }
 
-    public function update(Request $request, int $id) //, int $id
+    public function update(Request $request, int $id)
     {
         $data = $request->validate([
             'name' => 'required|max:30',
@@ -69,16 +69,6 @@ class TimerController extends Controller
         $timer->started_at = $started_at;
         $timer->stopped_at = $stopped_at;
         $timer->save();
-
-        // ->save([
-        //     'name' => $data['name'],
-        //     'memo' => $data['memo'],
-        //     'category_id' => $data['category_id'],
-        //     'category_name' => $data['category_name'],
-        //     'category_color' => $data['category_color'],
-        //     // 'started_at' => $data['started_at'],
-        //     // 'stopped_at' => null,
-        // ]);
 
         return $timer;
     }
