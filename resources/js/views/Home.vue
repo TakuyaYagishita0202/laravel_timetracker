@@ -697,12 +697,26 @@ export default {
           const timer = this.timers.find(
             timer => timer.id === updatedTimer["id"]
           );
+
+          // 更新前と更新後の日付データを取得
+          const startedBefore = moment(timer.started_at);
+          const startedAfter = moment(new Date(updatedTimer["started_at"]));
+
+          // timerの値を更新
           timer.name = this.editTimer.name;
           timer.category_id = this.editTimer.category_id;
           timer.category_name = this.editTimer.category_name;
           timer.category_color = this.editTimer.category_color;
           timer.started_at = updatedTimer["started_at"];
           timer.stopped_at = updatedTimer["stopped_at"];
+
+          // 日付が更新されていた場合はtimesを日付降順に並び替え
+          if (!startedBefore.isSame(startedAfter)) {
+            this.timers.sort(function(a, b) {
+              return a.started_at < b.started_at ? 1 : -1;
+            });
+          }
+
           this.editTimerDialog = false;
           this.updateTimerSnackbar = true;
         });
@@ -775,13 +789,13 @@ export default {
         this.time.minutes.push(i);
         this.time.seconds.push(i);
       }
-    },
+    }
 
     /**
      * editTimer.stopped_at計算用
      */
     // calculateStoppedAt(){
-        
+
     // }
   },
   computed: {
@@ -825,7 +839,7 @@ export default {
             s: this.editTimer.time.seconds
           })
           .toDate();
-      },
+      }
     }
   }
 };

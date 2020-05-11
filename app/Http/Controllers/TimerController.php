@@ -17,7 +17,7 @@ class TimerController extends Controller
 
     public function index()
     {
-        return Timer::mine()->orderBy('id', 'desc')->get()->toArray();
+        return Timer::mine()->orderBy('started_at', 'desc')->get()->toArray();
     }
 
     public function store(Request $request)
@@ -80,10 +80,7 @@ class TimerController extends Controller
         //     // 'stopped_at' => null,
         // ]);
 
-        // return $stopped_at;
         return $timer;
-        // return $time->addHour(9);
-        // return Timer::mine()->find($id);
     }
 
     public function delete(int $id)
