@@ -3,9 +3,7 @@
 @section('content')
 <v-app>
     <v-content>
-        <div id="app">
-            <router-view />
-        </div>
+        <router-view />
     </v-content>
 </v-app>
 @endsection

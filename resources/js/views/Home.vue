@@ -171,7 +171,7 @@
                 <!-- カテゴリ追加ボタン -->
                 <div class="text-center">
                   <v-menu
-                    v-model="menu"
+                    v-model="TimerAddCategoryMenu"
                     :close-on-content-click="false"
                     :nudge-width="200"
                     offset-x
@@ -214,7 +214,7 @@
                                 <template v-slot:append>
                                   <v-menu
                                     v-model="
-                                                                            colorMenu
+                                                                            TimerColorMenu
                                                                         "
                                     top
                                     nudge-bottom="248"
@@ -258,7 +258,7 @@
 
                       <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn text @click="menu = false">CANCEL</v-btn>
+                        <v-btn text @click="TimerAddCategoryMenu = false">CANCEL</v-btn>
                         <v-btn
                           color="primary"
                           text
@@ -350,7 +350,7 @@
                 <!-- カテゴリ追加ボタン -->
                 <div class="text-center">
                   <v-menu
-                    v-model="menu"
+                    v-model="ManualAddCategoryMenu"
                     :close-on-content-click="false"
                     :nudge-width="200"
                     offset-x
@@ -388,7 +388,7 @@
                               >
                                 <template v-slot:append>
                                   <v-menu
-                                    v-model="colorMenu"
+                                    v-model="ManualColorMenu"
                                     top
                                     nudge-bottom="248"
                                     nudge-left="16"
@@ -416,7 +416,7 @@
 
                       <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn text @click="menu = false">CANCEL</v-btn>
+                        <v-btn text @click="ManualAddCategoryMenu = false">CANCEL</v-btn>
                         <v-btn
                           color="primary"
                           text
@@ -685,8 +685,10 @@ export default {
       doneTimerSnackbar: false,
       updateTimerSnackbar: false,
       deleteTimerSnackbar: false,
-      menu: false,
-      colorMenu: false,
+      TimerAddCategoryMenu: false,
+      ManualAddCategoryMenu: false,
+      TimerColorMenu: false,
+      ManualColorMenu: false,
       deleteMenu: false,
       mask: "!#XXXXXXXX",
       timers: [],
