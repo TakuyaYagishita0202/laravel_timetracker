@@ -101,7 +101,7 @@
             }}
           </span>
         </template>
-        <template v-slot:item.date="{ item }">
+        <template v-slot:item.started_at="{ item }">
           {{
           formatTimer(item)
           }}
@@ -121,7 +121,10 @@
       <v-dialog v-model="newTimerDialog" width="500">
         <v-card>
           <v-card-title>
-            <span class="headline">タイマーモード</span>
+            <v-sheet color="pink lighten-3" elevation="3" class="text-start py-3 px-6" dark>
+              <v-icon>mdi-timer-outline</v-icon>
+              <span class="headline">タイマーモード</span>
+            </v-sheet>
           </v-card-title>
           <v-card-text>
             <v-container>
@@ -309,7 +312,10 @@
       <v-dialog v-model="saveTimerDialog" width="500">
         <v-card>
           <v-card-title>
-            <span class="headline">入力モード</span>
+            <v-sheet color="blue lighten-2" elevation="3" class="text-start py-3 px-6" dark>
+              <v-icon>mdi-playlist-plus</v-icon>
+              <span class="headline">マニュアルモード</span>
+            </v-sheet>
           </v-card-title>
           <v-card-text>
             <v-container>
@@ -510,7 +516,10 @@
       <v-dialog v-model="editTimerDialog" width="500">
         <v-card>
           <v-card-title>
-            <span class="headline">記録を編集する</span>
+            <v-sheet color="blue-grey lighten-3" elevation="3" class="text-start py-3 px-6" dark>
+              <v-icon>mdi-update</v-icon>
+              <span class="headline">記録を編集する</span>
+            </v-sheet>
           </v-card-title>
           <v-card-text>
             <v-container>
@@ -727,7 +736,7 @@ export default {
         },
         { text: "メモ", value: "memo", sortable: false },
         { text: "カテゴリー", value: "category", sortable: false },
-        { text: "時刻", value: "date", sortable: false },
+        { text: "時刻", value: "started_at" },
         { text: "計測期間", value: "time", sortable: false }
       ]
     };
