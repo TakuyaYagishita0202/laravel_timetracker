@@ -125,7 +125,7 @@
       <v-dialog v-model="newTimerDialog" width="500">
         <v-card>
           <v-card-title class="headline">
-            <v-sheet color="pink lighten-3" elevation="3" class="text-start py-3 px-6" dark>
+            <v-sheet color="pink lighten-3" elevation="3" class="text-start py-3 px-3" dark>
               <v-icon>mdi-timer-outline</v-icon>タイマーモード
             </v-sheet>
           </v-card-title>
@@ -289,7 +289,7 @@
       <v-dialog v-model="saveTimerDialog" width="500">
         <v-card>
           <v-card-title class="headline">
-            <v-sheet color="blue lighten-2" elevation="3" class="text-start py-3 px-6" dark>
+            <v-sheet color="blue lighten-2" elevation="3" class="text-start py-3 px-3" dark>
               <v-icon>mdi-playlist-plus</v-icon>マニュアルモード
             </v-sheet>
           </v-card-title>
@@ -505,7 +505,7 @@
       <v-dialog v-model="editTimerDialog" width="500">
         <v-card>
           <v-card-title class="headline">
-            <v-sheet color="blue-grey lighten-3" elevation="3" class="text-start py-3 px-6" dark>
+            <v-sheet color="blue-grey lighten-3" elevation="3" class="text-start py-3 px-3" dark>
               <v-icon>mdi-update</v-icon>エディットモード
             </v-sheet>
             <v-spacer></v-spacer>
@@ -745,16 +745,16 @@ export default {
     };
   },
   created() {
-    window.axios.get("/timers").then(response => {
+    window.axios.get("/api/timers").then(response => {
       this.timers = response.data;
-      window.axios.get("/timers/active").then(response => {
+      window.axios.get("/api/timers/active").then(response => {
         if (response.data.id !== undefined) {
           this.startTimer(response.data);
           this.activeTimerId = response.data.id;
         }
       });
     });
-    window.axios.get("/categories").then(response => {
+    window.axios.get("/api/categories").then(response => {
       this.categories = response.data;
     });
 
@@ -826,7 +826,7 @@ export default {
      */
     stopTimer: function() {
       window.axios
-        .post(`/timers/stop`)
+        .post(`/api/timers/stop`)
         .then(response => {
           // Stop the activeTimer
           const activeTimer = this.timers.find(
@@ -855,7 +855,7 @@ export default {
      */
     createTimer: function() {
       window.axios
-        .post(`/timers`, {
+        .post(`/api/timers`, {
           name: this.newTimerName,
           memo: this.newTimerMemo,
           category_id: this.newTimerCategory["id"],
@@ -885,7 +885,7 @@ export default {
      */
     addTimer() {
       window.axios
-        .post(`/timers/save`, {
+        .post(`/api/timers/save`, {
           name: this.saveTimer.name,
           memo: this.saveTimer.memo,
           category_id: this.saveTimer.category.id,
@@ -925,7 +925,7 @@ export default {
      */
     createCategory: function() {
       window.axios
-        .post("/categories", {
+        .post("/api/categories", {
           name: this.newCategoryName,
           color: this.newCategoryColor
         })
@@ -980,7 +980,7 @@ export default {
      */
     updateTimer() {
       window.axios
-        .post(`/timers/${this.editTimer.id}/update`, {
+        .put(`/api/timers/${this.editTimer.id}`, {
           name: this.editTimer.name,
           memo: this.editTimer.memo,
           category_id: this.editTimer.category_id,
@@ -1029,7 +1029,7 @@ export default {
     deleteTimer() {
       // 物理削除
       window.axios
-        .delete(`/timers/${this.editTimer.id}/delete`)
+        .delete(`/api/timers/${this.editTimer.id}`)
         .then(response => {
           const deletedTimer = response.data;
           this.timers = this.timers.filter(
