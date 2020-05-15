@@ -11,6 +11,9 @@ import DatetimePicker from 'vuetify-datetime-picker'
 
 import router from "./router";
 
+// ルートコンポーネントをインポートする
+import App from './App.vue'
+
 window.Vue = Vue;
 Vue.use(VueRouter);
 Vue.use(Vuetify);
@@ -20,6 +23,10 @@ Vue.use(DatetimePicker);
 const app = new Vue({
     el: "#app",
     router,
+    components: {
+        App
+    },
+    template: '<App />',
     vuetify: new Vuetify({
         lang: {
             locales: {
