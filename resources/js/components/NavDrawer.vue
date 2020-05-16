@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer color="primary" v-model="drawer" app dark>
+    <v-navigation-drawer v-if="isLogin" color="primary" v-model="drawer" app dark>
         <v-list-item class="px-2">
             <v-list-item-avatar>
                 <!-- Userimageを受け取る -->
@@ -8,7 +8,7 @@
                 ></v-img>
             </v-list-item-avatar>
             <!-- Usernameを受け取る -->
-            <v-list-item-title>Takuya Yagishita</v-list-item-title>
+            <v-list-item-title>{{ username }}</v-list-item-title>
         </v-list-item>
 
         <v-divider></v-divider>
@@ -32,7 +32,7 @@
 
         <template v-slot:append>
             <div class="pa-2">
-                <v-btn block>ログアウト</v-btn>
+                <v-btn block @click="logout">ログアウト</v-btn>
             </div>
         </template>
     </v-navigation-drawer>
@@ -71,6 +71,21 @@ export default {
             ],
             mini: true
         };
+    },
+    methods: {
+        async logout() {
+            await this.$store.dispatch("auth/logout");
+
+            this.$router.push("/login");
+        }
+    },
+    computed: {
+        isLogin() {
+            return this.$store.getters["auth/check"];
+        },
+        username() {
+            return this.$store.getters["auth/username"];
+        }
     }
 };
 </script>

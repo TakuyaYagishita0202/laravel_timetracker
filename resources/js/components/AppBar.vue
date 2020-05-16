@@ -1,5 +1,5 @@
 <template>
-    <v-app-bar color="transparent" app flat>
+    <v-app-bar v-if="!isLogin" color="transparent" app flat>
         <v-toolbar-title>TimerApp</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn rounded to="/login" text>ログイン</v-btn>
@@ -8,7 +8,13 @@
 </template>
 
 <script>
-export default {};
+export default {
+    computed: {
+        isLogin() {
+            return this.$store.getters["auth/check"];
+        },
+    }
+};
 </script>
 
 <style scoped>

@@ -6,10 +6,12 @@
         <v-card-text>
             <v-form>
                 <v-text-field
-                    label="Username"
-                    prepend-icon="mdi-account-circle"
+                    v-model="loginForm.email"
+                    label="Email"
+                    prepend-icon="mdi-email"
                 />
                 <v-text-field
+                    v-model="loginForm.password"
                     :type="showPassword ? 'text' : 'password'"
                     label="Password"
                     prepend-icon="mdi-lock"
@@ -21,7 +23,7 @@
         <v-divider></v-divider>
         <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="info" text>ログイン</v-btn>
+            <v-btn color="info" text @click="login">ログイン</v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -31,8 +33,21 @@ export default {
     name: "LoginPage",
     data() {
         return {
-            showPassword: false
+            showPassword: false,
+            loginForm: {
+                email: "",
+                password: ""
+            }
         };
+    },
+    methods: {
+        async login() {
+            // authストアのloginアクションを呼び出す
+            await this.$store.dispatch("auth/login", this.loginForm);
+
+            // トップページに移動する
+            this.$router.push("/");
+        }
     }
 };
 </script>

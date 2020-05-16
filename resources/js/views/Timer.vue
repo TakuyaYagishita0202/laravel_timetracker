@@ -125,7 +125,7 @@
       <v-dialog v-model="newTimerDialog" width="500">
         <v-card>
           <v-card-title class="headline">
-            <v-sheet color="pink lighten-3" elevation="3" class="text-start py-3 px-3" dark>
+            <v-sheet color="pink lighten-3" class="text-start py-3 px-3" dark>
               <v-icon>mdi-timer-outline</v-icon>タイマーモード
             </v-sheet>
           </v-card-title>
@@ -289,7 +289,7 @@
       <v-dialog v-model="saveTimerDialog" width="500">
         <v-card>
           <v-card-title class="headline">
-            <v-sheet color="blue lighten-2" elevation="3" class="text-start py-3 px-3" dark>
+            <v-sheet color="blue lighten-2" class="text-start py-3 px-3" dark>
               <v-icon>mdi-playlist-plus</v-icon>マニュアルモード
             </v-sheet>
           </v-card-title>
@@ -505,7 +505,7 @@
       <v-dialog v-model="editTimerDialog" width="500">
         <v-card>
           <v-card-title class="headline">
-            <v-sheet color="blue-grey lighten-3" elevation="3" class="text-start py-3 px-3" dark>
+            <v-sheet color="blue-grey lighten-3" class="text-start py-3 px-3" dark>
               <v-icon>mdi-update</v-icon>タイマーを編集する
             </v-sheet>
             <v-spacer></v-spacer>
@@ -537,7 +537,7 @@
                 <!-- カテゴリー選択 -->
                 <v-col cols="12">
                   <v-select
-                    v-model="editTimer.category_name"
+                    v-model="editTimer.category"
                     :items="categories"
                     item-text="name"
                     item-value="value"
@@ -708,9 +708,7 @@ export default {
       editTimer: {
         id: "",
         name: "",
-        category_name: "",
-        category_id: "",
-        category_color: "",
+        category: "",
         memo: "",
         started_at: new Date(),
         stopped_at: "",
@@ -947,9 +945,12 @@ export default {
     openEditTimer(item) {
       this.editTimer.id = item.id;
       this.editTimer.name = item.name;
-      this.editTimer.category_id = item.category_id;
-      this.editTimer.category_name = item.category_name;
-      this.editTimer.category_color = item.category_color;
+
+      //修正中
+      this.editTimer.category = this.categories.find(
+        category => category.id === parseInt(item.category_id)
+      );
+
       this.editTimer.memo = item.memo;
 
       this.editTimer.started_at = new Date(item.started_at);
@@ -983,9 +984,11 @@ export default {
         .put(`/api/timers/${this.editTimer.id}`, {
           name: this.editTimer.name,
           memo: this.editTimer.memo,
-          category_id: this.editTimer.category_id,
-          category_name: this.editTimer.category_name,
-          category_color: this.editTimer.category_color,
+
+          category_id: this.editTimer.category.id,
+          category_name: this.editTimer.category.name,
+          category_color: this.editTimer.category.color,
+
           started_at: this.editTimer.started_at,
           stopped_at: this.editTimer.stopped_at
         })
@@ -1001,9 +1004,10 @@ export default {
 
           // timerの値を更新
           timer.name = this.editTimer.name;
-          timer.category_id = this.editTimer.category_id;
-          timer.category_name = this.editTimer.category_name;
-          timer.category_color = this.editTimer.category_color;
+          timer.memo = this.editTimer.memo; 
+          timer.category_id = this.editTimer.category.id;
+          timer.category_name = this.editTimer.category.name;
+          timer.category_color = this.editTimer.category.color;
           timer.started_at = updatedTimer["started_at"];
           timer.stopped_at = updatedTimer["stopped_at"];
 

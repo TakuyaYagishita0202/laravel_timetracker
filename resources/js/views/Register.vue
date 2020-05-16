@@ -6,14 +6,17 @@
         <v-card-text>
             <v-form>
                 <v-text-field
+                    v-model="registerForm.name"
                     label="Username"
                     prepend-icon="mdi-account-circle"
                 />
                 <v-text-field
+                    v-model="registerForm.email"
                     label="Email"
                     prepend-icon="mdi-email"
                 />
                 <v-text-field
+                    v-model="registerForm.password"
                     :type="showPassword ? 'text' : 'password'"
                     label="Password"
                     prepend-icon="mdi-lock"
@@ -21,6 +24,7 @@
                     @click:append="showPassword = !showPassword"
                 />
                 <v-text-field
+                    v-model="registerForm.password_confirmation"
                     :type="showPassword ? 'text' : 'password'"
                     label="Password(confirm)"
                     prepend-icon="mdi-lock"
@@ -32,7 +36,7 @@
         <v-divider></v-divider>
         <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="success" text>登録</v-btn>
+            <v-btn color="success" text @click="register">登録</v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -42,8 +46,23 @@ export default {
     name: "LoginPage",
     data() {
         return {
-            showPassword: false
+            showPassword: false,
+            registerForm: {
+                name: "",
+                email: "",
+                password: "",
+                password_confirmation: ""
+            }
         };
+    },
+    methods: {
+        async register() {
+            // authストアのresigterアクションを呼び出す
+            await this.$store.dispatch("auth/register", this.registerForm);
+
+            // トップページに移動する
+            this.$router.push("/");
+        }
     }
 };
 </script>
