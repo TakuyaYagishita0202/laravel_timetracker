@@ -36,7 +36,7 @@
     <!-- サーバーエラー時 -->
     <v-snackbar top v-model="errorSnackbar" color="error">
       エラーが発生しました。メッセージ：{{ errorMessage }}
-      <v-btn text @click="deleteTimerSnackbar = false">閉じる</v-btn>
+      <v-btn text @click="errorSnackbar = false">閉じる</v-btn>
     </v-snackbar>
 
     <!-- 右下部Snackbar -->
@@ -741,6 +741,9 @@ export default {
         { text: "計測期間", value: "time", sortable: false }
       ]
     };
+  },
+  beforeCreate() {
+    this.$store.dispatch('timer/fetchTimers')
   },
   created() {
     window.axios.get("/api/timers").then(response => {
