@@ -13,21 +13,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Auth::routes();
-
-// あとでコメントアウト
-// Route::redirect('/', '/home');
-// Route::get('/home', 'HomeController@index')->name('home');
-
-Route::get('/api/timers', 'TimerController@index');
-Route::post('/api/timers', 'TimerController@store');
-Route::post('/api/timers/save', 'TimerController@save');
-Route::put('/api/timers/{id}', 'TimerController@update');
-Route::delete('/api/timers/{id}', 'TimerController@delete');
-Route::post('/api/timers/stop', 'TimerController@stopRunning');
-Route::get('/api/timers/active', 'TimerController@running');
-Route::get('/api/categories', 'CategoryController@index');
-Route::post('/api/categories', 'CategoryController@store');
+// Route::get('/api/timers', 'TimerController@index');
+// Route::post('/api/timers', 'TimerController@store');
+// Route::post('/api/timers/save', 'TimerController@save');
+// Route::put('/api/timers/{id}', 'TimerController@update');
+// Route::delete('/api/timers/{id}', 'TimerController@delete');
+// Route::post('/api/timers/stop', 'TimerController@stopRunning');
+// Route::get('/api/timers/active', 'TimerController@running');
+// Route::get('/api/categories', 'CategoryController@index');
+// Route::post('/api/categories', 'CategoryController@store');
 
 // APIのURL以外のリクエストに対してはindexテンプレートを返す
 Route::get('/{any?}', function () {

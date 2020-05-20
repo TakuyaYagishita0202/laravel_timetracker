@@ -1,4 +1,5 @@
 import './bootstrap'
+// 削除？
 require("./bootstrap");
 
 import Vue from "vue";
@@ -16,12 +17,14 @@ import ja from 'vuetify/es5/locale/ja.js'
 import "@mdi/font/css/materialdesignicons.css";
 import VueTheMask from 'vue-the-mask'
 import DatetimePicker from 'vuetify-datetime-picker'
+import VueLoading from 'vue-loading-template'
 
 window.Vue = Vue;
 Vue.use(VueRouter);
 Vue.use(Vuetify);
 Vue.use(VueTheMask);
 Vue.use(DatetimePicker);
+Vue.use(VueLoading);
 
 const createApp = async () => {
     await store.dispatch('auth/currentUser')

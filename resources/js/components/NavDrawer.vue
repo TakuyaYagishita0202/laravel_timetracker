@@ -50,18 +50,6 @@ export default {
           url: "/dashboard",
           disabled: false
         },
-        {
-          title: "タイムライン",
-          icon: "mdi-view-list",
-          url: "",
-          disabled: true
-        },
-        {
-          title: "チャット",
-          icon: "mdi-forum",
-          url: "",
-          disabled: true
-        },
         { title: "設定", icon: "mdi-cog", url: "", disabled: true }
       ],
       mini: true

@@ -23,6 +23,8 @@ class Timer extends Model
      */
     protected $with = ['user'];
 
+    protected $hidden = ['user'];
+
     /**
      * Get the related user.
      *

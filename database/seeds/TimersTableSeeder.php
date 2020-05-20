@@ -154,7 +154,11 @@ class TimersTableSeeder extends Seeder
                 'category_id' => '1',
                 'category_name' => 'UI UX Design',
                 'category_color' => '#5735CE'
-            ]
+            ],
+            
         ]);
+
+        // ファクトリーでtimerを1000件生成
+        // factory(App\Timer::class, 1000)->create();
     }
 }
