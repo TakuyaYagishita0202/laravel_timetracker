@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer v-if="isLogin" :src="'./img/NavDrawer_01.png'" v-model="drawer" app dark>
+  <v-navigation-drawer v-if="isLogin" :src="'./img/NavDrawer_02.png'" v-model="drawer" app dark>
     <v-list-item class="px-2">
       <v-list-item-avatar>
         <!-- Userimageを受け取る -->

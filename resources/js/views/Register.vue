@@ -1,69 +1,101 @@
 <template>
-  <v-card max-width="600px" class="mx-auto mt-5">
-    <v-card-title>
-      <h1 class="display-1">会員登録</h1>
-    </v-card-title>
-    <v-alert class="mb-0 py-0" v-if="registerErrors" border="right" colored-border type="error">
-      <ul v-if="registerErrors.name">
-        <li v-for="msg in registerErrors.name" :key>{{ msg }}</li>
-      </ul>
-      <ul v-if="registerErrors.email">
-        <li v-for="msg in registerErrors.email" :key>
-          <span class="error--text">{{ msg }}</span>
-        </li>
-      </ul>
-      <ul v-if="registerErrors.password">
-        <li v-for="msg in registerErrors.password" :key>
-          <span class="error--text">{{ msg }}</span>
-        </li>
-      </ul>
-    </v-alert>
-    <v-card-text>
-      <v-form>
-        <v-text-field
-          tabindex="1"
-          v-model="registerForm.name"
-          label="ユーザー名"
-          prepend-icon="mdi-account-circle"
-        />
-        <v-text-field
-          tabindex="2"
-          v-model="registerForm.email"
-          label="メールアドレス"
-          prepend-icon="mdi-email"
-        />
-        <v-text-field
-          tabindex="3"
-          v-model="registerForm.password"
-          :type="showPassword ? 'text' : 'password'"
-          label="パスワード"
-          prepend-icon="mdi-lock"
-          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-          @click:append="showPassword = !showPassword"
-        />
-        <v-text-field
-          tabindex="4"
-          v-model="registerForm.password_confirmation"
-          :type="showPassword ? 'text' : 'password'"
-          label="パスワード(確認用)"
-          prepend-icon="mdi-lock"
-          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-          @click:append="showPassword = !showPassword"
-        />
-      </v-form>
-    </v-card-text>
-    <v-divider></v-divider>
-    <v-card-actions>
-      <v-spacer></v-spacer>
-      <v-btn
-        tabindex="5"
-        :disabled="registerForm.name === '' || registerForm.email === '' || registerForm.password === '' || registerForm.password_confirmation === ''"
-        color="success"
-        text
-        @click="register"
-      >登録</v-btn>
-    </v-card-actions>
-  </v-card>
+  <v-row>
+    <v-spacer></v-spacer>
+    <v-col cols="9" md="6" class="mt-n11">
+      <v-img :src="'./svg/register.svg'"></v-img>
+    </v-col>
+    <v-spacer></v-spacer>
+    <v-col cols="12" md="5">
+      <v-card elevation="0">
+        <v-card-title>
+          <h1 class="display-1 font-weight-bold">三日坊主を卒業しましょう。</h1>
+        </v-card-title>
+        <v-card-text>
+          <div class="text--primary subtitle-2">
+            quitterはあなたの習慣化を後押しするアプリケーションです。
+            <br />プログラミングやデザイン、語学や資格の学習など
+            <br />日々の自己投資を記録してなりたい自分に近づきましょう。
+          </div>
+        </v-card-text>
+        <v-card-title class="pb-0">
+          <h2 class="title">アカウントを作成する</h2>
+        </v-card-title>
+        <v-card-text>
+          <v-form>
+            <v-text-field
+              tabindex="1"
+              v-model="registerForm.name"
+              label="ユーザー名"
+              prepend-icon="mdi-account-circle"
+            />
+            <v-text-field
+              tabindex="2"
+              v-model="registerForm.email"
+              label="メールアドレス"
+              prepend-icon="mdi-email"
+            />
+            <v-text-field
+              tabindex="3"
+              v-model="registerForm.password"
+              :type="showPassword ? 'text' : 'password'"
+              label="パスワード"
+              prepend-icon="mdi-lock"
+              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+              @click:append="showPassword = !showPassword"
+            />
+            <v-text-field
+              tabindex="4"
+              v-model="registerForm.password_confirmation"
+              :type="showPassword ? 'text' : 'password'"
+              label="パスワード(確認用)"
+              prepend-icon="mdi-lock"
+              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+              @click:append="showPassword = !showPassword"
+              @keyup.enter="register"
+            />
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <!-- <v-btn text color="#00acee">
+            <v-icon left>mdi-twitter</v-icon>twitterで登録
+          </v-btn> -->
+          <v-tooltip right>
+            <template v-slot:activator="{ on }">
+              <v-btn text color="#00acee" v-on="on">
+                <v-icon left>mdi-twitter</v-icon>twitterで登録
+              </v-btn>
+            </template>
+            <span><v-icon dark left>mdi-alert-circle</v-icon>
+            現在準備中です</span>
+          </v-tooltip>
+          <v-spacer></v-spacer>
+          <v-btn
+            tabindex="5"
+            :disabled="registerForm.name === '' || registerForm.email === '' || registerForm.password === '' || registerForm.password_confirmation === ''"
+            color="success"
+            text
+            @click="register"
+          >登録</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-col>
+    <v-spacer></v-spacer>
+    <template v-if="registerErrors">
+      <v-snackbar v-model="snackbar" multi-line vertical color="error" right bottom>
+        <ul v-if="registerErrors.email">
+          <li v-for="msg in registerErrors.email" :key>
+            <span>{{ msg }}</span>
+          </li>
+        </ul>
+        <ul v-if="registerErrors.password">
+          <li v-for="msg in registerErrors.password" :key>
+            <span>{{ msg }}</span>
+          </li>
+        </ul>
+        <v-btn text dark @click="snackbar = false">閉じる</v-btn>
+      </v-snackbar>
+    </template>
+  </v-row>
 </template>
 
 <script>
@@ -73,6 +105,7 @@ export default {
   },
   data() {
     return {
+      snackbar: false,
       showPassword: false,
       registerForm: {
         name: "",
@@ -102,10 +135,15 @@ export default {
       return this.$store.state.auth.apiStatus;
     },
     registerErrors() {
+      this.snackbar = true;
       return this.$store.state.auth.registerErrorMessages;
     }
   }
 };
 </script>
 
-<style></style>
+<style scoped>
+.v-btn {
+  text-transform: none !important;
+}
+</style>

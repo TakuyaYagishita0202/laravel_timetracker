@@ -15,9 +15,14 @@ class TimerController extends Controller
         $this->middleware('auth');
     }
 
+    // public function index()
+    // {
+    //     return Timer::mine()->orderBy('started_at', 'desc')->get()->toArray();
+    // }
+
     public function index()
     {
-        return Timer::mine()->orderBy('started_at', 'desc')->get()->toArray();
+        return Timer::mine()->orderBy('started_at', 'desc')->paginate(20)->toArray();
     }
 
     public function store(Request $request)

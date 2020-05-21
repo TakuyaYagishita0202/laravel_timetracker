@@ -12,7 +12,7 @@
       </v-snackbar>
     </div>
     <!-- 記録完了時 twitterシェア -->
-    <v-snackbar top v-model="snackbar.done" color="info">
+    <v-snackbar top v-model="snackbar.done" color="#00acee">
       お疲れ様でした。この記録を友達にシェアしましょう！
       <v-btn
         text
@@ -93,7 +93,18 @@
       <!-- タイマーを日付ごとに表示 -->
       <template v-if="!isEmpty(timersArray[0][0])">
         <template v-for="timers in timersArray">
-          <span class="title">{{ formatDate(timers[0].started_at) }}</span>
+          <span class="title">{{ formatDate(timers[0].started_at) }}
+            <!-- twitterボタン -->
+            <!-- <v-btn
+              icon
+              color="#00acee"
+              href="https://twitter.com/home"
+            　target="_blank"
+              style="text-decoration:none"
+            >
+              <v-icon>mdi-twitter</v-icon>
+            </v-btn> -->
+          </span>
           <v-data-table
             :headers="headers"
             :items="timers"
@@ -131,6 +142,11 @@
             </template>
           </v-data-table>
         </template>
+          <v-row v-if="!lastPage" justify="center">
+            <v-btn :loading="infiniteLoading" @click="loadMore">
+              <v-icon left>mdi-chevron-down</v-icon>
+              もっと見る</v-btn>
+          </v-row>
       </template>
       <!-- 計測データ無し時 -->
       <v-row v-else align="center" justify="center">
@@ -147,14 +163,12 @@
     <div class="text-center">
       <v-dialog v-model="dialog.newTimer" width="500">
         <v-card>
-          <v-card-title class="headline">
-            <v-sheet color="pink lighten-3" class="text-start py-3 px-3" dark>
-              <v-icon>mdi-timer-outline</v-icon>タイマーモード
-            </v-sheet>
+          <v-card-title class="pink--text text--lighten-3 headline">
+            <v-icon class="mr-2" color="pink lighten-3">mdi-timer-outline</v-icon>タイマーモード
           </v-card-title>
           <v-card-text>
             <v-form v-model="newTimerValid">
-              <v-container>
+              <v-container class="pt-0">
                 <v-row>
                   <!-- 記録内容入力 -->
                   <v-col cols="12">
@@ -311,13 +325,11 @@
     <div class="text-center">
       <v-dialog v-model="dialog.saveTimer" width="500">
         <v-card>
-          <v-card-title class="headline">
-            <v-sheet color="blue lighten-2" class="text-start py-3 px-3" dark>
-              <v-icon>mdi-playlist-plus</v-icon>マニュアルモード
-            </v-sheet>
+          <v-card-title class="blue--text text--lighten-2 headline">
+            <v-icon class="mr-2" color="blue lighten-2">mdi-playlist-plus</v-icon>マニュアルモード
           </v-card-title>
           <v-card-text>
-            <v-container>
+            <v-container class="pt-0">
               <v-row>
                 <!-- 記録内容入力 -->
                 <v-col cols="12">
@@ -527,14 +539,12 @@
     <div class="text-center">
       <v-dialog v-model="dialog.editTimer" width="500">
         <v-card>
-          <v-card-title class="headline">
-            <v-sheet color="blue-grey lighten-3" class="text-start py-3 px-3" dark>
-              <v-icon>mdi-update</v-icon>タイマーを編集する
-            </v-sheet>
+          <v-card-title class="grey--text text--darken-2 headline">
+            <v-icon class="mr-2">mdi-update</v-icon>タイマーを編集する
             <v-spacer></v-spacer>
             <v-btn
               icon
-              color="info"
+              color="#00acee"
               href="https://twitter.com/home"
               　target="_blank"
               style="text-decoration:none"
@@ -543,7 +553,7 @@
             </v-btn>
           </v-card-title>
           <v-card-text>
-            <v-container>
+            <v-container class="pt-0">
               <v-row>
                 <!-- 記録内容入力 -->
                 <v-col cols="12">
@@ -763,7 +773,7 @@ export default {
           sortable: false,
           width: "15%"
         },
-        { text: "時刻", value: "started_at", width: "15%" },
+        { text: "時刻", value: "started_at", sortable: false, width: "15%" },
         { text: "計測期間", value: "time", sortable: false, width: "10%" }
       ],
       time: {
@@ -776,11 +786,14 @@ export default {
       newTimerValid: false,
       height: window.innerHeight,
       loading: true,
+      infiniteLoading:false,
+      lastPage:false,
       textFieldProps: {
         prependIcon: "mdi-clock",
       },
       fab: false,
       errorMessage: "",
+      page:1,
       //カラーコード入力制御
       mask: "!#XXXXXXXX"
     };
@@ -791,7 +804,10 @@ export default {
   },
   created() {
     window.axios.get("/api/timers").then(response => {
-      this.timers = response.data;
+      this.timers = response.data.data;
+      if(this.page === response.data.last_page){
+        this.lastPage = true;
+      }
       window.axios.get("/api/timers/active").then(response => {
         if (response.data.id !== undefined) {
           this.startTimer(response.data);
@@ -844,6 +860,25 @@ export default {
      */
     showTimer: function(timer) {
       return this.counter.timer && this.counter.timer.id === timer.id;
+    },
+
+    /**
+     * もっと見る
+     */
+    loadMore(){
+      this.infiniteLoading = true;
+      window.axios.get("/api/timers",{
+        params: {
+            page: this.page + 1,
+        },
+      }).then(response => {
+        this.page += 1
+        this.timers.push(...response.data.data)
+        this.infiniteLoading = false;
+        if(this.page === response.data.last_page){
+          this.lastPage = true;
+        }
+      });
     },
 
     /**
@@ -945,12 +980,20 @@ export default {
         })
         .then(response => {
           const savedTimer = response.data;
-          this.timers.push(savedTimer);
+          const oldestTimer = this.timers[this.timers.length - 1]
 
-          // 日付降順に並び替え
-          this.timers.sort(function(a, b) {
-            return a.started_at < b.started_at ? 1 : -1;
-          });
+          // 現在のページがlastPageか
+          // またはsavedTimerがtimersの最も古いデータ(oldestTimer)よりも新しい場合のみpushする
+          if(
+            this.lastPage ||
+            moment(savedTimer.started_at).isAfter(oldestTimer.started_at)
+          ){
+            this.timers.push(savedTimer);
+            // 日付降順に並び替え
+            this.timers.sort(function(a, b) {
+              return a.started_at < b.started_at ? 1 : -1;
+            });
+          }
 
           this.dialog.saveTimer = false;
           this.snackbar.done = true;
@@ -1066,6 +1109,18 @@ export default {
           timer.category_color = this.editTimer.category.color;
           timer.started_at = updatedTimer["started_at"];
           timer.stopped_at = updatedTimer["stopped_at"];
+
+          // 現在のページがlastPageでないかつ
+          // 編集後の記録がtimersの最後の記録よりも古い場合は見かけ上削除する
+          const oldestTimer = this.timers[this.timers.length - 1]
+          if(
+            !this.lastPage &&
+            moment(updatedTimer["started_at"]).isBefore(oldestTimer.started_at)
+          ){
+            this.timers = this.timers.filter(
+              timer => timer.id !== updatedTimer.id
+            );
+          }
 
           // 日付が更新されていた場合はtimesを日付降順に並び替え
           if (!startedBefore.isSame(startedAfter)) {

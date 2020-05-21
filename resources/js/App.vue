@@ -48,7 +48,4 @@ export default {
 };
 </script>
 <style>
-.v-content {
-  background: #f3f3f3;
-}
 </style>

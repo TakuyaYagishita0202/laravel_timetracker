@@ -158,7 +158,7 @@ class TimersTableSeeder extends Seeder
             
         ]);
 
-        // ファクトリーでtimerを1000件生成
+        // ファクトリーでダミーデータを1000件生成
         // factory(App\Timer::class, 1000)->create();
     }
 }
