@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="body">
     <!-- 上部Snackbar -->
     <!-- 計算中タイマー -->
     <div v-if="!isEmpty(timers)">
@@ -84,7 +84,7 @@
     <template v-if="loading">
       <v-row :style="`height:${height}px`" align="center" justify="center">
         <v-col>
-          <vue-loading type="bars" color="#64DD17" :size="{ width: '50px', height: '50px' }"></vue-loading>
+          <vue-loading type="bars" color="#B0BEC5" :size="{ width: '50px', height: '50px' }"></vue-loading>
         </v-col>
       </v-row>
     </template>
@@ -167,7 +167,7 @@
             <v-icon class="mr-2" color="pink lighten-3">mdi-timer-outline</v-icon>タイマーモード
           </v-card-title>
           <v-card-text>
-            <v-form v-model="newTimerValid">
+            <v-form v-model="newTimerValid" ref="newTimerForm">
               <v-container class="pt-0">
                 <v-row>
                   <!-- 記録内容入力 -->
@@ -329,188 +329,190 @@
             <v-icon class="mr-2" color="blue lighten-2">mdi-playlist-plus</v-icon>マニュアルモード
           </v-card-title>
           <v-card-text>
-            <v-container class="pt-0">
-              <v-row>
-                <!-- 記録内容入力 -->
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="saveTimer.name"
-                    label="記録する内容*"
-                    required
-                    prepend-icon="mdi-border-color"
-                    :rules="rules.name"
-                    :counter="30"
-                  ></v-text-field>
-                </v-col>
+            <v-form ref="saveTimerForm">
+              <v-container class="pt-0">
+                <v-row>
+                  <!-- 記録内容入力 -->
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model="saveTimer.name"
+                      label="記録する内容*"
+                      required
+                      prepend-icon="mdi-border-color"
+                      :rules="rules.name"
+                      :counter="30"
+                    ></v-text-field>
+                  </v-col>
 
-                <!-- カテゴリー選択 -->
-                <v-col cols="12">
-                  <v-select
-                    v-if="isEmpty(categories)"
-                    v-model="saveTimer.category"
-                    :items="categories"
-                    item-text="name"
-                    item-value="value"
-                    label="カテゴリー*を追加してください"
-                    return-object
-                    required
-                    prepend-icon="mdi-folder"
-                    disabled
-                  ></v-select>
-                  <v-select
-                    v-else
-                    v-model="saveTimer.category"
-                    :items="categories"
-                    item-text="name"
-                    item-value="value"
-                    label="カテゴリーを選択する*"
-                    return-object
-                    required
-                    prepend-icon="mdi-folder"
-                    :rules="rules.category"
-                  ></v-select>
-                </v-col>
+                  <!-- カテゴリー選択 -->
+                  <v-col cols="12">
+                    <v-select
+                      v-if="isEmpty(categories)"
+                      v-model="saveTimer.category"
+                      :items="categories"
+                      item-text="name"
+                      item-value="value"
+                      label="カテゴリー*を追加してください"
+                      return-object
+                      required
+                      prepend-icon="mdi-folder"
+                      disabled
+                    ></v-select>
+                    <v-select
+                      v-else
+                      v-model="saveTimer.category"
+                      :items="categories"
+                      item-text="name"
+                      item-value="value"
+                      label="カテゴリーを選択する*"
+                      return-object
+                      required
+                      prepend-icon="mdi-folder"
+                      :rules="rules.category"
+                    ></v-select>
+                  </v-col>
 
-                <!-- カテゴリ追加ボタン -->
-                <div class="text-center">
-                  <v-menu
-                    v-model="menu.saveTimerCategory"
-                    :close-on-content-click="false"
-                    :nudge-width="200"
-                    offset-x
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-btn text color="grey lighten-1" v-on="on">
-                        <v-icon color="light-green accent-4">mdi-plus</v-icon>カテゴリーを追加する
-                      </v-btn>
-                    </template>
+                  <!-- カテゴリ追加ボタン -->
+                  <div class="text-center">
+                    <v-menu
+                      v-model="menu.saveTimerCategory"
+                      :close-on-content-click="false"
+                      :nudge-width="200"
+                      offset-x
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-btn text color="grey lighten-1" v-on="on">
+                          <v-icon color="light-green accent-4">mdi-plus</v-icon>カテゴリーを追加する
+                        </v-btn>
+                      </template>
 
-                    <!-- カテゴリー追加メニュー -->
-                    <v-card>
-                      <v-card-title>
-                        <span class="headline">カテゴリーを追加する</span>
-                      </v-card-title>
-                      <v-card-text>
-                        <v-container>
-                          <v-row>
-                            <v-col cols="12">
-                              <!-- カテゴリー名入力 -->
-                              <v-text-field
-                                v-model="newCategory.name"
-                                label="カテゴリー名を入力"
-                                prepend-icon="mdi-folder-plus"
-                              ></v-text-field>
+                      <!-- カテゴリー追加メニュー -->
+                      <v-card>
+                        <v-card-title>
+                          <span class="headline">カテゴリーを追加する</span>
+                        </v-card-title>
+                        <v-card-text>
+                          <v-container>
+                            <v-row>
+                              <v-col cols="12">
+                                <!-- カテゴリー名入力 -->
+                                <v-text-field
+                                  v-model="newCategory.name"
+                                  label="カテゴリー名を入力"
+                                  prepend-icon="mdi-folder-plus"
+                                ></v-text-field>
 
-                              <!-- カラーコード選択 -->
-                              <v-text-field
-                                prepend-icon="mdi-format-color-fill"
-                                v-mask="mask"
-                                hide-details
-                                class="ma-0 pa-0"
-                                label="色を選択"
-                                v-model="newCategory.color"
-                              >
-                                <template v-slot:append>
-                                  <v-menu
-                                    v-model="menu.saveTimerColor"
-                                    top
-                                    nudge-bottom="248"
-                                    nudge-left="16"
-                                    :close-on-content-click="false"
-                                  >
-                                    <template v-slot:activator="{ on }">
-                                      <div :style="swatchStyle" v-on="on" />
-                                    </template>
-                                    <v-card>
-                                      <v-card-text class="pa-0">
-                                        <v-color-picker
-                                          v-model="newCategory.color"
-                                          flat
-                                          show-swatches
-                                        />
-                                      </v-card-text>
-                                    </v-card>
-                                  </v-menu>
-                                </template>
-                              </v-text-field>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </v-card-text>
+                                <!-- カラーコード選択 -->
+                                <v-text-field
+                                  prepend-icon="mdi-format-color-fill"
+                                  v-mask="mask"
+                                  hide-details
+                                  class="ma-0 pa-0"
+                                  label="色を選択"
+                                  v-model="newCategory.color"
+                                >
+                                  <template v-slot:append>
+                                    <v-menu
+                                      v-model="menu.saveTimerColor"
+                                      top
+                                      nudge-bottom="248"
+                                      nudge-left="16"
+                                      :close-on-content-click="false"
+                                    >
+                                      <template v-slot:activator="{ on }">
+                                        <div :style="swatchStyle" v-on="on" />
+                                      </template>
+                                      <v-card>
+                                        <v-card-text class="pa-0">
+                                          <v-color-picker
+                                            v-model="newCategory.color"
+                                            flat
+                                            show-swatches
+                                          />
+                                        </v-card-text>
+                                      </v-card>
+                                    </v-menu>
+                                  </template>
+                                </v-text-field>
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                        </v-card-text>
 
-                      <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn text @click="menu.saveTimerCategory = false">CANCEL</v-btn>
-                        <v-btn
-                          color="primary"
-                          text
-                          :disabled="newCategory.name === ''"
-                          @click="createCategory()"
-                        >SAVE</v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-menu>
-                </div>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn text @click="menu.saveTimerCategory = false">CANCEL</v-btn>
+                          <v-btn
+                            color="primary"
+                            text
+                            :disabled="newCategory.name === ''"
+                            @click="createCategory()"
+                          >SAVE</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-menu>
+                  </div>
 
-                <!-- メモ入力 -->
-                <v-col cols="12">
-                  <v-textarea
-                    v-model="saveTimer.memo"
-                    label="メモ"
-                    type="text"
-                    prepend-icon="mdi-text-box"
-                    :rules="rules.memo"
-                    :counter="140"
-                  ></v-textarea>
-                </v-col>
+                  <!-- メモ入力 -->
+                  <v-col cols="12">
+                    <v-textarea
+                      v-model="saveTimer.memo"
+                      label="メモ"
+                      type="text"
+                      prepend-icon="mdi-text-box"
+                      :rules="rules.memo"
+                      :counter="140"
+                    ></v-textarea>
+                  </v-col>
 
-                <!-- 開始時刻入力 -->
-                <v-col cols="12">
-                  <v-datetime-picker
-                    v-model="saveTimer.started_at"
-                    :text-field-props="textFieldProps"
-                    label="開始日時* / 計測期間*"
-                  >
-                    <template slot="dateIcon">
-                      <v-icon>mdi-calendar</v-icon>
-                    </template>
-                    <template slot="timeIcon">
-                      <v-icon>mdi-clock-outline</v-icon>
-                    </template>
-                    <template slot="actions" slot-scope="{ parent }">
-                      <v-btn text color="primary" @click="parent.okHandler">SAVE</v-btn>
-                    </template>
-                  </v-datetime-picker>
-                </v-col>
+                  <!-- 開始時刻入力 -->
+                  <v-col cols="12">
+                    <v-datetime-picker
+                      v-model="saveTimer.started_at"
+                      :text-field-props="textFieldProps"
+                      label="開始日時* / 計測期間*"
+                    >
+                      <template slot="dateIcon">
+                        <v-icon>mdi-calendar</v-icon>
+                      </template>
+                      <template slot="timeIcon">
+                        <v-icon>mdi-clock-outline</v-icon>
+                      </template>
+                      <template slot="actions" slot-scope="{ parent }">
+                        <v-btn text color="primary" @click="parent.okHandler">SAVE</v-btn>
+                      </template>
+                    </v-datetime-picker>
+                  </v-col>
 
-                <!-- 計測期間入力 -->
-                <v-col cols="4">
-                  <v-select
-                    v-model="saveTimer.time.hours"
-                    label="時間(hours)"
-                    required
-                    prepend-icon="mdi-timer-sand-full"
-                    :items="time.hours"
-                  ></v-select>
-                </v-col>
-                <v-col cols="4">
-                  <v-select
-                    v-model="saveTimer.time.minutes"
-                    label="分(minutes)"
-                    required
-                    :items="time.minutes"
-                  ></v-select>
-                </v-col>
-                <v-col cols="4">
-                  <v-select
-                    v-model="saveTimer.time.seconds"
-                    label="秒(seconds)"
-                    required
-                    :items="time.seconds"
-                  ></v-select>
-                </v-col>
-              </v-row>
-            </v-container>
+                  <!-- 計測期間入力 -->
+                  <v-col cols="4">
+                    <v-select
+                      v-model="saveTimer.time.hours"
+                      label="時間(hours)"
+                      required
+                      prepend-icon="mdi-timer-sand-full"
+                      :items="time.hours"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-select
+                      v-model="saveTimer.time.minutes"
+                      label="分(minutes)"
+                      required
+                      :items="time.minutes"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="4">
+                    <v-select
+                      v-model="saveTimer.time.seconds"
+                      label="秒(seconds)"
+                      required
+                      :items="time.seconds"
+                    ></v-select>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-form>
             <small>*は必須項目です。</small>
           </v-card-text>
 
@@ -540,7 +542,7 @@
       <v-dialog v-model="dialog.editTimer" width="500">
         <v-card>
           <v-card-title class="grey--text text--darken-2 headline">
-            <v-icon class="mr-2">mdi-update</v-icon>タイマーを編集する
+            <v-icon class="mr-2">mdi-update</v-icon>レコードを編集する
             <v-spacer></v-spacer>
             <v-btn
               icon
@@ -811,6 +813,7 @@ export default {
       window.axios.get("/api/timers/active").then(response => {
         if (response.data.id !== undefined) {
           this.startTimer(response.data);
+          this.$store.dispatch("timer/fetchActive", true);
         }
       });
     });
@@ -885,6 +888,7 @@ export default {
      * タイマーを開始
      */
     startTimer: function(timer) {
+      this.$store.dispatch("timer/fetchActive", true);
       const started = moment(timer.started_at);
 
       this.counter.timer = timer;
@@ -927,6 +931,7 @@ export default {
             spread: 70,
             origin: { y: 0.6 }
           });
+          this.$store.dispatch("timer/fetchActive", false);
         })
         .catch(err => {
           this.errorMessage = err;
@@ -1326,6 +1331,26 @@ export default {
           }
         }
       },
+    },
+
+    /**
+     * 新規作成ダイアログがfalseの場合はバリデーションをリセットする
+     */
+    "dialog.newTimer": {
+      handler: function(val) {
+        if(!this.dialog.newTimer){
+          this.$refs.newTimerForm.resetValidation()
+        }
+      },
+      deep: true
+    },
+    "dialog.saveTimer": {
+      handler: function(val) {
+        if(!this.dialog.saveTimer){
+          this.$refs.saveTimerForm.resetValidation()
+        }
+      },
+      deep: true
     },
 
     timersArray: {

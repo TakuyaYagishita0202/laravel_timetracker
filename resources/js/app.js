@@ -44,6 +44,9 @@ const createApp = async () => {
                 },
                 current: 'ja',
             },
+            theme: {
+                dark: false
+            }
         })
     })
 };

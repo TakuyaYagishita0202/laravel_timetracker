@@ -5,16 +5,16 @@
       <v-img :src="'./svg/register.svg'"></v-img>
     </v-col>
     <v-spacer></v-spacer>
-    <v-col cols="12" md="5">
+    <v-col cols="12" md="5" class="mt-n11">
       <v-card elevation="0">
         <v-card-title>
           <h1 class="display-1 font-weight-bold">三日坊主を卒業しましょう。</h1>
         </v-card-title>
         <v-card-text>
           <div class="text--primary subtitle-2">
-            quitterはあなたの習慣化を後押しするアプリケーションです。
+            Quitterは「習慣化」を後押しするタイムトラッキングツールです。
             <br />プログラミングやデザイン、語学や資格の学習など
-            <br />日々の自己投資を記録してなりたい自分に近づきましょう。
+            <br />日々の自己投資を記録して、なりたい自分に近づきましょう。
           </div>
         </v-card-text>
         <v-card-title class="pb-0">
@@ -53,6 +53,7 @@
               @click:append="showPassword = !showPassword"
               @keyup.enter="register"
             />
+            <small>*利用を継続することで Quitter の利用規約とプライバシーポリシーに同意したものとみなされます。</small>
           </v-form>
         </v-card-text>
         <v-card-actions>
