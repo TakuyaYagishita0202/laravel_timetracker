@@ -3,7 +3,13 @@
     <!-- 上部Snackbar -->
     <!-- 計算中タイマー -->
     <div v-if="!isEmpty(timers)">
-      <v-snackbar v-model="snackbar.activeTimer" top :timeout="0" :color="counter.timer.category_color">
+      <v-snackbar
+        v-model="snackbar.activeTimer"
+        top
+        right
+        :timeout="0"
+        :color="counter.timer.category_color"
+      >
         <strong class="timer-name pr-4">{{ counter.timer.name }}</strong>
         {{ activeTimerString }}
         <v-btn text @click="stopTimer()">
@@ -14,12 +20,7 @@
     <!-- 記録完了時 twitterシェア -->
     <v-snackbar top v-model="snackbar.done" color="#00acee">
       お疲れ様でした。この記録を友達にシェアしましょう！
-      <v-btn
-        text
-        @click="snackbar.done = false"
-        href="https://twitter.com/home"
-        　target="_blank"
-      >
+      <v-btn text @click="snackbar.done = false" href="https://twitter.com/home" 　target="_blank">
         <v-icon>mdi-twitter</v-icon>
       </v-btn>
     </v-snackbar>
@@ -52,14 +53,7 @@
     >
       <template v-slot:activator>
         <v-hover v-slot:default="{ hover }">
-          <v-btn
-            v-model="fab"
-            color="light-green accent-4"
-            dark
-            fab
-            x-large
-            :elevation="hover ? 12 : 6"
-          >
+          <v-btn v-model="fab" color="#46DBC9" dark fab x-large :elevation="hover ? 12 : 6">
             <v-icon v-if="fab">mdi-close</v-icon>
             <v-icon v-else>mdi-plus</v-icon>
           </v-btn>
@@ -70,12 +64,12 @@
         fab
         dark
         small
-        color="pink lighten-3"
+        color="#FB5D63"
         @click.stop="dialog.newTimer = true"
       >
         <v-icon>mdi-timer-outline</v-icon>
       </v-btn>
-      <v-btn fab dark small color="blue lighten-2" @click.stop="dialog.saveTimer = true">
+      <v-btn fab dark small color="#00ACEE" @click.stop="dialog.saveTimer = true">
         <v-icon>mdi-playlist-plus</v-icon>
       </v-btn>
     </v-speed-dial>
@@ -93,7 +87,8 @@
       <!-- タイマーを日付ごとに表示 -->
       <template v-if="!isEmpty(timersArray[0][0])">
         <template v-for="timers in timersArray">
-          <span class="title">{{ formatDate(timers[0].started_at) }}
+          <span class="title">
+            {{ formatDate(timers[0].started_at) }}
             <!-- twitterボタン -->
             <!-- <v-btn
               icon
@@ -103,7 +98,7 @@
               style="text-decoration:none"
             >
               <v-icon>mdi-twitter</v-icon>
-            </v-btn> -->
+            </v-btn>-->
           </span>
           <v-data-table
             :headers="headers"
@@ -142,11 +137,11 @@
             </template>
           </v-data-table>
         </template>
-          <v-row v-if="!lastPage" justify="center">
-            <v-btn :loading="infiniteLoading" @click="loadMore">
-              <v-icon left>mdi-chevron-down</v-icon>
-              もっと見る</v-btn>
-          </v-row>
+        <v-row v-if="!lastPage" justify="center">
+          <v-btn :loading="infiniteLoading" @click="loadMore">
+            <v-icon left>mdi-chevron-down</v-icon>もっと見る
+          </v-btn>
+        </v-row>
       </template>
       <!-- 計測データ無し時 -->
       <v-row v-else align="center" justify="center">
@@ -163,8 +158,8 @@
     <div class="text-center">
       <v-dialog v-model="dialog.newTimer" width="500">
         <v-card>
-          <v-card-title class="pink--text text--lighten-3 headline">
-            <v-icon class="mr-2" color="pink lighten-3">mdi-timer-outline</v-icon>タイマーモード
+          <v-card-title class="headline">
+            <v-icon class="mr-2" color="#FB5D63">mdi-timer-outline</v-icon>タイマーモード
           </v-card-title>
           <v-card-text>
             <v-form v-model="newTimerValid" ref="newTimerForm">
@@ -174,6 +169,7 @@
                   <v-col cols="12">
                     <v-text-field
                       v-model="newTimer.name"
+                      color="#46DBC9"
                       label="記録する内容*"
                       required
                       prepend-icon="mdi-border-color"
@@ -186,6 +182,7 @@
                   <v-col cols="12">
                     <v-select
                       v-if="isEmpty(categories)"
+                      color="#46DBC9"
                       v-model="newTimer.category"
                       :items="categories"
                       item-text="name"
@@ -198,6 +195,7 @@
                     ></v-select>
                     <v-select
                       v-else
+                      color="#46DBC9"
                       v-model="newTimer.category"
                       :items="categories"
                       item-text="name"
@@ -293,6 +291,7 @@
                   <!-- メモ入力 -->
                   <v-col cols="12">
                     <v-textarea
+                      color="#46DBC9"
                       v-model="newTimer.memo"
                       label="メモ"
                       type="text"
@@ -325,8 +324,8 @@
     <div class="text-center">
       <v-dialog v-model="dialog.saveTimer" width="500">
         <v-card>
-          <v-card-title class="blue--text text--lighten-2 headline">
-            <v-icon class="mr-2" color="blue lighten-2">mdi-playlist-plus</v-icon>マニュアルモード
+          <v-card-title class="headline">
+            <v-icon class="mr-2" color="#00ACEE">mdi-playlist-plus</v-icon>マニュアルモード
           </v-card-title>
           <v-card-text>
             <v-form ref="saveTimerForm">
@@ -337,6 +336,7 @@
                     <v-text-field
                       v-model="saveTimer.name"
                       label="記録する内容*"
+                      color="#00ACEE"
                       required
                       prepend-icon="mdi-border-color"
                       :rules="rules.name"
@@ -348,6 +348,7 @@
                   <v-col cols="12">
                     <v-select
                       v-if="isEmpty(categories)"
+                      color="#00ACEE"
                       v-model="saveTimer.category"
                       :items="categories"
                       item-text="name"
@@ -360,6 +361,7 @@
                     ></v-select>
                     <v-select
                       v-else
+                      color="#00ACEE"
                       v-model="saveTimer.category"
                       :items="categories"
                       item-text="name"
@@ -457,6 +459,7 @@
                   <v-col cols="12">
                     <v-textarea
                       v-model="saveTimer.memo"
+                      color="#00ACEE"
                       label="メモ"
                       type="text"
                       prepend-icon="mdi-text-box"
@@ -488,6 +491,7 @@
                   <v-col cols="4">
                     <v-select
                       v-model="saveTimer.time.hours"
+                      color="#00ACEE"
                       label="時間(hours)"
                       required
                       prepend-icon="mdi-timer-sand-full"
@@ -497,6 +501,7 @@
                   <v-col cols="4">
                     <v-select
                       v-model="saveTimer.time.minutes"
+                      color="#00ACEE"
                       label="分(minutes)"
                       required
                       :items="time.minutes"
@@ -505,6 +510,7 @@
                   <v-col cols="4">
                     <v-select
                       v-model="saveTimer.time.seconds"
+                      color="#00ACEE"
                       label="秒(seconds)"
                       required
                       :items="time.seconds"
@@ -701,14 +707,14 @@ import { TheMask } from "vue-the-mask";
 export default {
   data() {
     return {
-      newTimer:{
-        name:"",
-        memo:"",
-        category:""
-      },
-      newCategory:{
+      newTimer: {
         name: "",
-        color: "#1CA085",
+        memo: "",
+        category: ""
+      },
+      newCategory: {
+        name: "",
+        color: "#1CA085"
       },
       saveTimer: {
         name: "",
@@ -727,35 +733,33 @@ export default {
         stopped_at: "",
         time: { hours: "", minutes: "", seconds: "" }
       },
-      dialog:{
-        newTimer:false,
-        saveTimer:false,
-        editTimer:false
+      dialog: {
+        newTimer: false,
+        saveTimer: false,
+        editTimer: false
       },
-      snackbar:{
-        activeTimer:false,
-        done:false,
-        updated:false,
-        deleted:false,
-        error:false
+      snackbar: {
+        activeTimer: false,
+        done: false,
+        updated: false,
+        deleted: false,
+        error: false
       },
-      menu:{
-        newTimerCategory:false,
-        saveTimerCategory:false,
-        newTimerColor:false,
-        saveTimerColor:false,
-        delete:false
+      menu: {
+        newTimerCategory: false,
+        saveTimerCategory: false,
+        newTimerColor: false,
+        saveTimerColor: false,
+        delete: false
       },
-      rules:{
-        category:[value => !!value || "選択してください。"],
-        memo:[
-          value => (value || "").length <= 140 || "最大140文字です。"
-        ],
-        require:[value => !!value || "入力してください。"],
-        name:[
+      rules: {
+        category: [value => !!value || "選択してください。"],
+        memo: [value => (value || "").length <= 140 || "最大140文字です。"],
+        require: [value => !!value || "入力してください。"],
+        name: [
           value => !!value || "入力してください。",
           value => (value || "").length <= 30 || "最大30文字です。"
-        ],
+        ]
       },
       timers: [],
       timersArray: [[]],
@@ -788,14 +792,14 @@ export default {
       newTimerValid: false,
       height: window.innerHeight,
       loading: true,
-      infiniteLoading:false,
-      lastPage:false,
+      infiniteLoading: false,
+      lastPage: false,
       textFieldProps: {
-        prependIcon: "mdi-clock",
+        prependIcon: "mdi-clock"
       },
       fab: false,
       errorMessage: "",
-      page:1,
+      page: 1,
       //カラーコード入力制御
       mask: "!#XXXXXXXX"
     };
@@ -807,7 +811,7 @@ export default {
   created() {
     window.axios.get("/api/timers").then(response => {
       this.timers = response.data.data;
-      if(this.page === response.data.last_page){
+      if (this.page === response.data.last_page) {
         this.lastPage = true;
       }
       window.axios.get("/api/timers/active").then(response => {
@@ -868,20 +872,22 @@ export default {
     /**
      * もっと見る
      */
-    loadMore(){
+    loadMore() {
       this.infiniteLoading = true;
-      window.axios.get("/api/timers",{
-        params: {
-            page: this.page + 1,
-        },
-      }).then(response => {
-        this.page += 1
-        this.timers.push(...response.data.data)
-        this.infiniteLoading = false;
-        if(this.page === response.data.last_page){
-          this.lastPage = true;
-        }
-      });
+      window.axios
+        .get("/api/timers", {
+          params: {
+            page: this.page + 1
+          }
+        })
+        .then(response => {
+          this.page += 1;
+          this.timers.push(...response.data.data);
+          this.infiniteLoading = false;
+          if (this.page === response.data.last_page) {
+            this.lastPage = true;
+          }
+        });
     },
 
     /**
@@ -985,14 +991,14 @@ export default {
         })
         .then(response => {
           const savedTimer = response.data;
-          const oldestTimer = this.timers[this.timers.length - 1]
+          const oldestTimer = this.timers[this.timers.length - 1];
 
           // 現在のページがlastPageか
           // またはsavedTimerがtimersの最も古いデータ(oldestTimer)よりも新しい場合のみpushする
-          if(
+          if (
             this.lastPage ||
             moment(savedTimer.started_at).isAfter(oldestTimer.started_at)
-          ){
+          ) {
             this.timers.push(savedTimer);
             // 日付降順に並び替え
             this.timers.sort(function(a, b) {
@@ -1044,8 +1050,8 @@ export default {
     openEditTimer(event) {
       const item = event;
       // 計測中は編集不可
-      if(item.id === this.counter.timer.id){
-        return false
+      if (item.id === this.counter.timer.id) {
+        return false;
       }
       this.editTimer.id = item.id;
       this.editTimer.name = item.name;
@@ -1117,11 +1123,11 @@ export default {
 
           // 現在のページがlastPageでないかつ
           // 編集後の記録がtimersの最後の記録よりも古い場合は見かけ上削除する
-          const oldestTimer = this.timers[this.timers.length - 1]
-          if(
+          const oldestTimer = this.timers[this.timers.length - 1];
+          if (
             !this.lastPage &&
             moment(updatedTimer["started_at"]).isBefore(oldestTimer.started_at)
-          ){
+          ) {
             this.timers = this.timers.filter(
               timer => timer.id !== updatedTimer.id
             );
@@ -1330,7 +1336,7 @@ export default {
             }
           }
         }
-      },
+      }
     },
 
     /**
@@ -1338,16 +1344,16 @@ export default {
      */
     "dialog.newTimer": {
       handler: function(val) {
-        if(!this.dialog.newTimer){
-          this.$refs.newTimerForm.resetValidation()
+        if (!this.dialog.newTimer) {
+          this.$refs.newTimerForm.resetValidation();
         }
       },
       deep: true
     },
     "dialog.saveTimer": {
       handler: function(val) {
-        if(!this.dialog.saveTimer){
-          this.$refs.saveTimerForm.resetValidation()
+        if (!this.dialog.saveTimer) {
+          this.$refs.saveTimerForm.resetValidation();
         }
       },
       deep: true

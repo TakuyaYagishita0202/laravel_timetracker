@@ -176,4 +176,7 @@ a {
 .image_active {
     border-color: #00cae3 !important;
 }
+.v-btn:focus{
+    outline: 0 !important;
+}
 </style>
