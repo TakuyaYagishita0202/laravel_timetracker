@@ -40,7 +40,7 @@
       <v-btn text @click="snackbar.error = false">閉じる</v-btn>
     </v-snackbar>
 
-    <!-- 右下部Snackbar -->
+    <!-- 右下部snackbar -->
     <!-- タイマー追加ボタン -->
     <v-speed-dial
       v-model="fab"

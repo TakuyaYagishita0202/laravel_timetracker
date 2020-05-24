@@ -25,6 +25,32 @@ class TimerController extends Controller
         return Timer::mine()->orderBy('started_at', 'desc')->paginate(20)->toArray();
     }
 
+    public function indexMonth()
+    {
+        $this_year = Carbon::today('Asia/Tokyo')->year;
+        $this_month = Carbon::today('Asia/Tokyo')->month;
+        return Timer::mine()
+            ->whereYear('started_at', $this_year)
+            // 以下修正
+            ->whereMonth('started_at', $this_month - 2)
+            ->get();
+    }
+
+    public function indexTotal()
+    {
+        $timers = Timer::mine()->get()->toArray();
+        $total_seconds = 0;
+        for($i = 0; $i < count($timers) ;$i++){
+            $started_at = new Carbon($timers[$i]['started_at']);
+            $stopped_at = new Carbon($timers[$i]['stopped_at']);
+            $diff = $started_at->diffInSeconds($stopped_at);
+            $total_seconds += $diff;
+        }
+
+        // 小数点第一位を丸める
+        return round(($total_seconds / 3600), 1);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([

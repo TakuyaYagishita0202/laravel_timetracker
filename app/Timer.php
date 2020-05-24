@@ -10,7 +10,7 @@ class Timer extends Model
      * {@inheritDoc}
      */
     protected $fillable = [
-        'name', 'memo', 'category_id', 'category_name', 'category_color', 'user_id', 'project_id', 'stopped_at', 'started_at'
+        'name', 'memo', 'category_id', 'category_name', 'category_color', 'user_id', 'stopped_at', 'started_at'
     ];
 
     /**
@@ -35,15 +35,6 @@ class Timer extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the related project
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function project()
-    {
-        return $this->belongsTo(Project::class);
-    }
 
     /**
      * Get timer for current user.

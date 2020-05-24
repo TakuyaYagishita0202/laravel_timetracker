@@ -25,7 +25,7 @@ Route::get('/user', function () {
     return Auth::user();
 })->name('user');
 
-// 記録を一覧で取得
+// 記録を取得(20レコード)
 Route::get('timers', 'TimerController@index');
 // タイマー開始と同時に記録を保存
 Route::post('timers', 'TimerController@store');
@@ -43,3 +43,8 @@ Route::get('timers/active', 'TimerController@running');
 Route::post('categories', 'CategoryController@store');
 // カテゴリーを一覧で取得
 Route::get('categories', 'CategoryController@index');
+
+//記録を取得(直近1ヶ月分)
+Route::get('records','TimerController@indexMonth');
+// 記録時間の総合計を取得
+Route::get('records/total','TimerController@indexTotal');
