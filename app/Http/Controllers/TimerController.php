@@ -31,8 +31,7 @@ class TimerController extends Controller
         $this_month = Carbon::today('Asia/Tokyo')->month;
         return Timer::mine()
             ->whereYear('started_at', $this_year)
-            // 以下修正
-            ->whereMonth('started_at', $this_month - 2)
+            ->whereMonth('started_at', $this_month)
             ->get();
     }
 
