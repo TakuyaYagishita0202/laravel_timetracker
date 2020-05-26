@@ -546,7 +546,7 @@
     <div class="text-center">
       <v-dialog v-model="dialog.editTimer" width="500">
         <v-card>
-          <v-card-title class="grey--text text--darken-2 headline">
+          <v-card-title class="grey--text text--darken-2 headline" :class="{title : windowSize.width < 600}">
             <v-icon class="mr-2">mdi-update</v-icon>レコードを編集する
             <v-spacer></v-spacer>
             <v-btn
@@ -615,7 +615,7 @@
                       <v-icon>mdi-clock-outline</v-icon>
                     </template>
                     <template slot="actions" slot-scope="{ parent }">
-                      <v-btn text color="primary" @click="parent.okHandler">SAVE</v-btn>
+                      <v-btn text color="primary" @click="parent.okHandler">保存</v-btn>
                     </template>
                   </v-datetime-picker>
                 </v-col>
@@ -985,7 +985,6 @@ export default {
           this.newTimer.memo = "";
           this.newTimer.category = "";
           this.dialog.newTimer = false;
-          console.log(response)
         })
         .catch(err => {
           this.errorMessage = err;
