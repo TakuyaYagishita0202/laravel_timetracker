@@ -16,7 +16,7 @@ class Timer extends Model
     /**
      * {@inheritDoc}
      */
-    protected $dates = ['started_at', 'stopped_at'];
+    protected $dates = ['started_at', 'stopped_at'];    
 
     /**
      * {@inheritDoc}

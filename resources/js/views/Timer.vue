@@ -985,6 +985,7 @@ export default {
           this.newTimer.memo = "";
           this.newTimer.category = "";
           this.dialog.newTimer = false;
+          console.log(response)
         })
         .catch(err => {
           this.errorMessage = err;
