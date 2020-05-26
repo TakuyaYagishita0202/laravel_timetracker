@@ -559,7 +559,7 @@
               <v-icon>mdi-twitter</v-icon>
             </v-btn>
           </v-card-title>
-          <v-card-text>
+          <v-card-text :class="{'px-4' : windowSize.width < 600}">
             <v-container class="pt-0">
               <v-row>
                 <!-- 記録内容入力 -->
@@ -624,24 +624,26 @@
                 <v-col cols="4">
                   <v-select
                     v-model="editTimer.time.hours"
-                    label="時間(hours)"
+                    label="時間"
                     required
                     prepend-icon="mdi-timer-sand-full"
                     :items="time.hours"
                   ></v-select>
                 </v-col>
+                <v-spacer></v-spacer>
                 <v-col cols="4">
                   <v-select
                     v-model="editTimer.time.minutes"
-                    label="分(minutes)"
+                    label="分"
                     required
                     :items="time.minutes"
                   ></v-select>
                 </v-col>
+                <v-spacer></v-spacer>
                 <v-col cols="4">
                   <v-select
                     v-model="editTimer.time.seconds"
-                    label="秒(seconds)"
+                    label="秒"
                     required
                     :items="time.seconds"
                   ></v-select>
