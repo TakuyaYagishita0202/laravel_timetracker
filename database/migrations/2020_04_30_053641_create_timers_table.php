@@ -27,7 +27,6 @@ class CreateTimersTable extends Migration
             $table->string('category_color')->nullable();
             
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('project_id')->references('id')->on('projects');
             $table->foreign('category_id')->references('id')->on('categories');
         });
     }
