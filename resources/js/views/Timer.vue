@@ -21,7 +21,7 @@
     <!-- 記録完了時 twitterシェア -->
     <v-snackbar top v-model="snackbar.done" color="#00acee" :multi-line="true">
       お疲れ様でした。この記録を友達にシェアしましょう！
-      <v-btn text @click="snackbar.done = false" href="https://twitter.com/home" 　target="_blank">
+      <v-btn text @click="snackbar.done = false" href="https://twitter.com/home" target="_blank" class="twitter">
         <v-icon>mdi-twitter</v-icon>
       </v-btn>
     </v-snackbar>
@@ -1387,6 +1387,9 @@ export default {
 };
 </script>
 <style scoped>
+.twitter{
+  text-decoration: none;
+}
 .v-btn {
   text-transform: none !important;
 }
