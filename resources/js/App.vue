@@ -53,5 +53,8 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
+.v-content{
+  background-color: #FDFDFD;
+}
 </style>

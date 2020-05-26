@@ -6,7 +6,7 @@
     </v-col>
     <v-spacer></v-spacer>
     <v-col cols="12" md="5">
-      <v-card elevation="0">
+      <v-card elevation="0" color="#FDFDFD">
         <v-card-title>
           <h1 class="display-1 font-weight-bold">
             おかえりなさい！
@@ -60,7 +60,7 @@
           <v-spacer></v-spacer>
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-btn text color="success" v-on="on" 　@click="testLogin">お試しログイン</v-btn>
+              <v-btn text color="success" v-on="on" @click="testLogin">お試しログイン</v-btn>
             </template>
             <span>
               <v-icon dark left>mdi-alert-circle</v-icon>一定期間後、データは初期化されます。

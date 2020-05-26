@@ -1,5 +1,5 @@
 <template>
-    <v-app-bar v-if="!isLogin" color="transparent" app flat>
+    <v-app-bar v-if="!isLogin" color="transparent" app flat hide-on-scroll>
         <v-img :src="'./svg/logo.svg'" max-height="40" max-width="40" class="mr-2" contain></v-img>
         <v-toolbar-title>
             Quitter

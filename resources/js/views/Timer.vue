@@ -491,7 +491,7 @@
                     <v-select
                       v-model="saveTimer.time.hours"
                       color="#00ACEE"
-                      label="時間(hours)"
+                      label="時間"
                       required
                       prepend-icon="mdi-timer-sand-full"
                       :items="time.hours"
@@ -501,7 +501,7 @@
                     <v-select
                       v-model="saveTimer.time.minutes"
                       color="#00ACEE"
-                      label="分(minutes)"
+                      label="分"
                       required
                       :items="time.minutes"
                     ></v-select>
@@ -510,7 +510,7 @@
                     <v-select
                       v-model="saveTimer.time.seconds"
                       color="#00ACEE"
-                      label="秒(seconds)"
+                      label="秒"
                       required
                       :items="time.seconds"
                     ></v-select>
