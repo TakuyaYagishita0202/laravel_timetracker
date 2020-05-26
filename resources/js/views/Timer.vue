@@ -324,7 +324,7 @@
           <v-card-title class="headline">
             <v-icon class="mr-2" color="#00ACEE">mdi-playlist-plus</v-icon>マニュアルモード
           </v-card-title>
-          <v-card-text>
+          <v-card-text　:class="{'px-4' : windowSize.width < 600}">
             <v-form ref="saveTimerForm">
               <v-container class="pt-0">
                 <v-row>

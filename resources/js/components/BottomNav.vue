@@ -4,6 +4,10 @@
       <span>{{item.title}}</span>
       <v-icon>{{item.icon}}</v-icon>
     </v-btn>
+    <v-btn @click="logout">
+      <span>ログアウト</span>
+      <v-icon>mdi-exit-to-app</v-icon>
+    </v-btn>
   </v-bottom-navigation>
 </template>
 
@@ -17,22 +21,25 @@ export default {
           title: "タイマー",
           icon: "mdi-clock",
           url: "/",
-          disabled: false
         },
         {
           title: "ダッシュボード",
           icon: "mdi-poll-box",
           url: "/dashboard",
-          disabled: false
         },
-        {
-          title: "設定",
-          icon: "mdi-cog",
-          url: "/config",
-          disabled: true
-        }
       ]
     };
+  },
+  methods: {
+    async logout() {
+      if(confirm('ログアウトしますか？')){
+        await this.$store.dispatch("auth/logout");
+
+        if (this.apiStatus) {
+          this.$router.push("/login");
+        }
+      }
+    },
   },
   computed: {
     isLogin() {
@@ -40,7 +47,10 @@ export default {
     },
     activeTimer() {
       return this.$store.state.timer.active;
-    }
+    },
+    apiStatus() {
+      return this.$store.state.auth.apiStatus;
+    },
   }
 };
 </script>
