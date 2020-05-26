@@ -60,7 +60,7 @@
           <v-spacer></v-spacer>
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-btn text color="success" v-on="on">お試しログイン</v-btn>
+              <v-btn text color="success" v-on="on" 　@click="testLogin">お試しログイン</v-btn>
             </template>
             <span>
               <v-icon dark left>mdi-alert-circle</v-icon>一定期間後、データは初期化されます。
@@ -112,6 +112,13 @@ export default {
     };
   },
   methods: {
+    testLogin() {
+      this.loginForm = {
+        email: "test@qmail.com",
+        password: "12345678"
+      };
+      this.login()
+    },
     async login() {
       // authストアのloginアクションを呼び出す
       await this.$store.dispatch("auth/login", this.loginForm);

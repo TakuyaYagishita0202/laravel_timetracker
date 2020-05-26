@@ -53,21 +53,37 @@
               @click:append="showPassword = !showPassword"
               @keyup.enter="register"
             />
-            <small>*利用を継続することで Quitter の利用規約とプライバシーポリシーに同意したものとみなされます。</small>
+            <small>
+              *利用を継続することで Quitter の
+              <v-dialog v-model="termsDialog" width="600px">
+                <template v-slot:activator="{ on }">
+                  <span class="link" v-on="on">利用規約</span>
+                </template>
+                <TermsOfUse @termsDialog="termsDialog = false" />
+              </v-dialog>と
+              <v-dialog v-model="privacyDialog" width="600px">
+                <template v-slot:activator="{ on }">
+                  <span class="link" v-on="on">プライバシーポリシー</span>
+                </template>
+                <PrivacyPolicy @privacyDialog="privacyDialog = false" />
+              </v-dialog>
+              に同意したものとみなされます。
+            </small>
           </v-form>
         </v-card-text>
         <v-card-actions>
           <!-- <v-btn text color="#00acee">
             <v-icon left>mdi-twitter</v-icon>twitterで登録
-          </v-btn> -->
+          </v-btn>-->
           <v-tooltip right>
             <template v-slot:activator="{ on }">
               <v-btn text color="#00acee" v-on="on">
                 <v-icon left>mdi-twitter</v-icon>twitterで登録
               </v-btn>
             </template>
-            <span><v-icon dark left>mdi-alert-circle</v-icon>
-            現在準備中です</span>
+            <span>
+              <v-icon dark left>mdi-alert-circle</v-icon>現在準備中です
+            </span>
           </v-tooltip>
           <v-spacer></v-spacer>
           <v-btn
@@ -100,7 +116,13 @@
 </template>
 
 <script>
+import TermsOfUse from "../components/TermsOfUse.vue";
+import PrivacyPolicy from "../components/PrivacyPolicy.vue";
 export default {
+  components: {
+    TermsOfUse,
+    PrivacyPolicy
+  },
   created() {
     this.clearError();
   },
@@ -113,7 +135,9 @@ export default {
         email: "",
         password: "",
         password_confirmation: ""
-      }
+      },
+      termsDialog: false,
+      privacyDialog: false
     };
   },
   methods: {
@@ -146,5 +170,11 @@ export default {
 <style scoped>
 .v-btn {
   text-transform: none !important;
+}
+.link {
+  color: #0000ee;
+}
+.link:hover {
+  cursor: pointer;
 }
 </style>

@@ -1,10 +1,11 @@
 <template>
-  <div class="body">
+  <div class="body" v-resize="onResize">
     <!-- 上部Snackbar -->
     <!-- 計算中タイマー -->
     <div v-if="!isEmpty(timers)">
       <v-snackbar
         v-model="snackbar.activeTimer"
+        :multi-line="true"
         top
         right
         :timeout="0"
@@ -18,7 +19,7 @@
       </v-snackbar>
     </div>
     <!-- 記録完了時 twitterシェア -->
-    <v-snackbar top v-model="snackbar.done" color="#00acee">
+    <v-snackbar top v-model="snackbar.done" color="#00acee" :multi-line="true">
       お疲れ様でした。この記録を友達にシェアしましょう！
       <v-btn text @click="snackbar.done = false" href="https://twitter.com/home" 　target="_blank">
         <v-icon>mdi-twitter</v-icon>
@@ -35,7 +36,7 @@
       <v-btn text @click="snackbar.deleted = false">閉じる</v-btn>
     </v-snackbar>
     <!-- サーバーエラー時 -->
-    <v-snackbar top v-model="snackbar.error" color="error">
+    <v-snackbar top v-model="snackbar.error" color="error" :multi-line="true">
       エラーが発生しました。メッセージ：{{ errorMessage }}
       <v-btn text @click="snackbar.error = false">閉じる</v-btn>
     </v-snackbar>
@@ -76,7 +77,7 @@
 
     <!-- ローディングアニメーション -->
     <template v-if="loading">
-      <v-row :style="`height:${height}px`" align="center" justify="center">
+      <v-row :style="`height:${windowSize.height}px`" align="center" justify="center">
         <v-col>
           <vue-loading type="bars" color="#B0BEC5" :size="{ width: '50px', height: '50px' }"></vue-loading>
         </v-col>
@@ -105,6 +106,7 @@
             :items="timers"
             :items-per-page="100"
             class="elevation-1 mb-4"
+            :hide-default-header="windowSize.width < 600"
             hide-default-footer
             @click:row="openEditTimer"
           >
@@ -112,7 +114,7 @@
               <span>{{ item.name }}</span>
             </template>
 
-            <template v-slot:item.memo="{ item }">
+            <template v-slot:item.memo="{ item }" class>
               <small class="text-muted">{{ item.memo }}</small>
             </template>
             <template v-slot:item.category="{ item }">
@@ -144,8 +146,8 @@
         </v-row>
       </template>
       <!-- 計測データ無し時 -->
-      <v-row v-else align="center" justify="center">
-        <v-col cols="5">
+      <v-row v-else :style="`height:${windowSize.height}px`" align="center" justify="center">
+        <v-col cols="10" md="4">
           <v-img :src="'./svg/no_data.svg'"></v-img>
           <p class="mt-2 title text-center">データがありません。</p>
           <p class="text-center">早速タイマーをセットして、記録を始めましょう。</p>
@@ -276,13 +278,13 @@
 
                         <v-card-actions>
                           <v-spacer></v-spacer>
-                          <v-btn text @click="menu.newTimerCategory = false">CANCEL</v-btn>
+                          <v-btn text @click="menu.newTimerCategory = false">閉じる</v-btn>
                           <v-btn
                             color="primary"
                             text
                             :disabled="newCategory.name === ''"
                             @click="createCategory()"
-                          >SAVE</v-btn>
+                          >保存</v-btn>
                         </v-card-actions>
                       </v-card>
                     </v-menu>
@@ -308,13 +310,8 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text @click="dialog.newTimer = false">CANCEL</v-btn>
-            <v-btn
-              color="blue darken-1"
-              text
-              @click="createTimer()"
-              :disabled="!newTimerValid"
-            >START</v-btn>
+            <v-btn text @click="dialog.newTimer = false">閉じる</v-btn>
+            <v-btn color="blue darken-1" text @click="createTimer()" :disabled="!newTimerValid">スタート</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -443,13 +440,13 @@
 
                         <v-card-actions>
                           <v-spacer></v-spacer>
-                          <v-btn text @click="menu.saveTimerCategory = false">CANCEL</v-btn>
+                          <v-btn text @click="menu.saveTimerCategory = false">閉じる</v-btn>
                           <v-btn
                             color="primary"
                             text
                             :disabled="newCategory.name === ''"
                             @click="createCategory()"
-                          >SAVE</v-btn>
+                          >保存</v-btn>
                         </v-card-actions>
                       </v-card>
                     </v-menu>
@@ -474,12 +471,14 @@
                       v-model="saveTimer.started_at"
                       :text-field-props="textFieldProps"
                       label="開始日時* / 計測期間*"
+                      :timePickerProps="timePickerProps"
+                      :datePickerProps="datePickerProps"
                     >
                       <template slot="dateIcon">
-                        <v-icon>mdi-calendar</v-icon>
+                        <v-icon color="#00ACEE">mdi-calendar</v-icon>
                       </template>
                       <template slot="timeIcon">
-                        <v-icon>mdi-clock-outline</v-icon>
+                        <v-icon color="#00ACEE">mdi-clock-outline</v-icon>
                       </template>
                       <template slot="actions" slot-scope="{ parent }">
                         <v-btn text color="primary" @click="parent.okHandler">SAVE</v-btn>
@@ -524,20 +523,20 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text @click="dialog.saveTimer = false">CANCEL</v-btn>
+            <v-btn text @click="dialog.saveTimer = false">閉じる</v-btn>
             <v-btn
               color="blue darken-1"
               text
               @click="addTimer()"
               :disabled="
-                                saveTimer.name.length > 30 ||
-                                    saveTimer.name === '' ||
-                                    saveTimer.category === '' ||
-                                    (saveTimer.memo &&
-                                        saveTimer.memo.length > 140) ||
-                                    saveTimer.started_at === '' || saveTimer.stopped_at === '' || (!saveTimer.time.hours && !saveTimer.time.minutes && !saveTimer.time.seconds)
-                            "
-            >SAVE</v-btn>
+                saveTimer.name.length > 30 ||
+                saveTimer.name === '' ||
+                saveTimer.category === '' ||
+                (saveTimer.memo &&
+                    saveTimer.memo.length > 140) ||
+                saveTimer.started_at === '' || saveTimer.stopped_at === '' || (!saveTimer.time.hours && !saveTimer.time.minutes && !saveTimer.time.seconds)
+              "
+            >保存</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -661,7 +660,7 @@
               offset-x
             >
               <template v-slot:activator="{ on }">
-                <v-btn text color="red lighten-1" v-on="on">DELETE</v-btn>
+                <v-btn text color="red lighten-1" v-on="on">削除</v-btn>
               </template>
               <!-- 削除確認メニュー -->
               <v-card>
@@ -672,14 +671,14 @@
 
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn text @click="menu.delete = false">CANCEL</v-btn>
-                  <v-btn color="red lighten-1" text @click="deleteTimer()">DELETE</v-btn>
+                  <v-btn text @click="menu.delete = false">閉じる</v-btn>
+                  <v-btn color="red lighten-1" text @click="deleteTimer()">実行</v-btn>
                 </v-card-actions>
               </v-card>
             </v-menu>
 
             <v-spacer></v-spacer>
-            <v-btn text @click="dialog.editTimer = false">CANCEL</v-btn>
+            <v-btn text @click="dialog.editTimer = false">閉じる</v-btn>
             <v-btn
               color="blue darken-1"
               text
@@ -692,7 +691,7 @@
                                         editTimer.memo.length > 140) ||
                                     editTimer.started_at === '' || editTimer.stopped_at === ''
                             "
-            >SAVE</v-btn>
+            >保存</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -770,9 +769,9 @@ export default {
           align: "start",
           sortable: false,
           value: "name",
-          width: "35%"
+          width: "30%"
         },
-        { text: "メモ", value: "memo", sortable: false, width: "  25%" },
+        { text: "メモ", value: "memo", sortable: false, width: "30%" },
         {
           text: "カテゴリー",
           value: "category",
@@ -790,12 +789,23 @@ export default {
       counter: { seconds: 0, timer: { name: "", category: "" } },
       activeTimerString: "Calculating...",
       newTimerValid: false,
-      height: window.innerHeight,
+      windowSize: {
+        width: window.innerWidth,
+        height: window.innerHeight
+      },
       loading: true,
       infiniteLoading: false,
       lastPage: false,
       textFieldProps: {
-        prependIcon: "mdi-clock"
+        prependIcon: "mdi-clock",
+        color: "#00ACEE"
+      },
+      timePickerProps: {
+        format: "24hr",
+        color: "#00ACEE"
+      },
+      datePickerProps: {
+        color: "#00ACEE"
       },
       fab: false,
       errorMessage: "",
@@ -844,6 +854,13 @@ export default {
         hours: this._padNumber(hours),
         seconds: this._padNumber(seconds % 60),
         minutes: this._padNumber(parseInt(seconds / 60, 10) % 60)
+      };
+    },
+
+    onResize() {
+      this.windowSize = {
+        width: window.innerWidth,
+        height: window.innerHeight
       };
     },
 
@@ -1383,5 +1400,8 @@ export default {
 }
 .v-snack__content .v-btn {
   margin-left: 0 !important;
+}
+.v-speed-dial {
+  z-index: 5;
 }
 </style>

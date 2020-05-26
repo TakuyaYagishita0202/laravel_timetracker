@@ -19,13 +19,13 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        // returns validated data as array
+        // バリデーションされたデータを返す
         $data = $request->validate([
             'name' => 'required|max:20',
             'color' => 'required'
             ]);
 
-        // merge with the current user ID
+        // ユーザーIDとマージする
         $data = array_merge($data, ['user_id' => auth()->user()->id]);
 
         $category = Category::create($data);

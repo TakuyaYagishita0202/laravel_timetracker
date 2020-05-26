@@ -11,6 +11,7 @@
         <RouterView />
       </v-container>
     </v-content>
+    <BottomNav></BottomNav>
     <Footer></Footer>
   </v-app>
 </template>
@@ -18,12 +19,14 @@
 import AppBar from "./components/AppBar.vue";
 import NavDrawer from "./components/NavDrawer.vue";
 import Footer from "./components/Footer.vue";
+import BottomNav from "./components/BottomNav.vue";
 import { INTERNAL_SERVER_ERROR } from "./util";
 export default {
   components: {
     AppBar,
     NavDrawer,
     Footer,
+    BottomNav
   },
   data() {
     return {

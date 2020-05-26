@@ -24,6 +24,7 @@ class CreateTimersTable extends Migration
             $table->timestamps();
             $table->unsignedInteger('category_id')->nullable();
             $table->string('category_name')->nullable();
+            $table->string('category_color')->nullable();
             
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('project_id')->references('id')->on('projects');
