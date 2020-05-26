@@ -17,7 +17,6 @@ class CreateTimersTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('memo')->nullable();
-            $table->unsignedInteger('project_id');
             $table->unsignedInteger('user_id');
             $table->timestamp('started_at');
             $table->timestamp('stopped_at')->default(null)->nullable();
