@@ -20,7 +20,7 @@
     </div>
     <!-- 記録完了時 twitterシェア -->
     <v-snackbar top v-model="snackbar.done" color="#00acee" :multi-line="true">
-      お疲れ様でした。この記録を友達にシェアしましょう！
+      お疲れ様でした！この記録を友達にシェアしましょう。
       <v-btn text @click="snackbar.done = false" href="https://twitter.com/home" target="_blank" class="twitter">
         <v-icon>mdi-twitter</v-icon>
       </v-btn>
@@ -471,8 +471,7 @@
                       v-model="saveTimer.started_at"
                       :text-field-props="textFieldProps"
                       label="開始日時* / 計測期間*"
-                      :timePickerProps="timePickerProps"
-                      :datePickerProps="datePickerProps"
+                      :timePickerProps="editTimePickerProps"
                     >
                       <template slot="dateIcon">
                         <v-icon color="#00ACEE">mdi-calendar</v-icon>
@@ -481,7 +480,7 @@
                         <v-icon color="#00ACEE">mdi-clock-outline</v-icon>
                       </template>
                       <template slot="actions" slot-scope="{ parent }">
-                        <v-btn text color="primary" @click="parent.okHandler">SAVE</v-btn>
+                        <v-btn text color="primary" @click="parent.okHandler">保存</v-btn>
                       </template>
                     </v-datetime-picker>
                   </v-col>
@@ -606,6 +605,8 @@
                   <v-datetime-picker
                     v-model="editTimer.started_at"
                     :text-field-props="textFieldProps"
+                    :timePickerProps="timePickerProps"
+                    :datePickerProps="datePickerProps"
                     label="開始日時* / 計測期間*"
                   >
                     <template slot="dateIcon">
@@ -805,6 +806,9 @@ export default {
       timePickerProps: {
         format: "24hr",
         color: "#00ACEE"
+      },
+      editTimePickerProps: {
+        format: "24hr",
       },
       datePickerProps: {
         color: "#00ACEE"
