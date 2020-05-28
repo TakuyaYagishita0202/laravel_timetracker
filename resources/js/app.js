@@ -46,7 +46,15 @@ const createApp = async () => {
                 current: 'ja',
             },
             theme: {
-                dark: false
+                options: {
+                    customProperties: true
+                },
+                dark: false,
+                themes: {
+                    light: {
+                        background: '#FDFDFD'
+                    }
+                }
             }
         })
     })
