@@ -6,7 +6,7 @@
     </v-col>
     <v-spacer></v-spacer>
     <v-col cols="12" md="5">
-      <v-card elevation="0" color="#FDFDFD">
+      <v-card elevation="0" style="background-color: var(--v-background-base)">
         <v-card-title>
           <h1 class="display-1 font-weight-bold">
             おかえりなさい！
