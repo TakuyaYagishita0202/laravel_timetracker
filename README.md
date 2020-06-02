@@ -66,7 +66,7 @@ QuitterはVue.jsとLaravelで構築されたシンプルなタイムトラッキ
 - [ダッシュボード](https://github.com/TakuyaYagishita0202/laravel_timetracker/wiki/images/sp_Dashboard.png)
 
 ## 今後の改善点
-- プロジェクトの[Todo]()をご確認ください。
+- プロジェクトの[Todo](https://github.com/TakuyaYagishita0202/laravel_timetracker/projects/1)をご確認ください。
 
 ## その他
 ### デザイン
