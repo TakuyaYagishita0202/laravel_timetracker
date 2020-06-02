@@ -1,4 +1,4 @@
-<p align="center"><img src='./public/svg/logo.svg' width="300"></p>
+<p align="center" style="font-size:60px"><img src='./public/svg/logo.svg' width="240"><br>Quitter</p>
 
 ## 目次
 - [アプリケーションについて](https://github.com/TakuyaYagishita0202/laravel_timetracker#Quitter)
@@ -43,22 +43,22 @@ QuitterはVue.jsとLaravelで構築されたシンプルなタイムトラッキ
 - [canvas-confetti](https://github.com/catdad/canvas-confetti): タイマー終了時のアニメーション
 
 ## スクリーンショット
-### ログイン / 会員登録
+#### ログイン / 会員登録
 <img src='https://github.com/TakuyaYagishita0202/laravel_timetracker/wiki/images/Login&Register.png' width="100%">
 
-### タイマー画面
+#### タイマー画面
 <img src='https://github.com/TakuyaYagishita0202/laravel_timetracker/wiki/images/Timer.png' width="100%">
 
-### ダッシュボード
+#### ダッシュボード
 <img src='https://github.com/TakuyaYagishita0202/laravel_timetracker/wiki/images/Dashboard.png' width="100%">
 
-### フォーム
+#### フォーム
 <img src='https://github.com/TakuyaYagishita0202/laravel_timetracker/wiki/images/Form.png' width="100%">
 
-### タイマー作動中~記録終了
+#### タイマー作動中~記録終了
 <img src='https://github.com/TakuyaYagishita0202/laravel_timetracker/wiki/images/Recording.png' width="100%">
 
-### ナビゲーションドロワー
+#### ナビゲーションドロワー
 <img src='https://github.com/TakuyaYagishita0202/laravel_timetracker/wiki/images/NavigationDrawer.png' width="100%">
 
 ### モバイル
@@ -75,6 +75,6 @@ QuitterはVue.jsとLaravelで構築されたシンプルなタイムトラッキ
 - [ロゴ](https://www.figma.com/file/ZPg5Pplfxt85twoL6m5xKr/Quitter_Logo?node-id=0%3A1)
 ### 素材
 以下のフリー素材を活用させていただきました。
-- [unDraw](https://www.figma.com/)
+- [unDraw](https://undraw.co/)
 - [DrawKit](https://www.drawkit.io/)
 - [Free avatars flat icons](https://www.behance.net/gallery/47035405/Free-avatars-flat-icons)
