@@ -98,7 +98,7 @@
           </v-card>
         </v-menu>
       </div>
-      
+
       <!-- ログアウトボタン -->
       <div class="pa-2">
         <v-btn block @click="logout">ログアウト</v-btn>
@@ -163,10 +163,12 @@ export default {
   },
   methods: {
     async logout() {
-      await this.$store.dispatch("auth/logout");
+      if (confirm("ログアウトしますか？")) {
+        await this.$store.dispatch("auth/logout");
 
-      if (this.apiStatus) {
-        this.$router.push("/login");
+        if (this.apiStatus) {
+          this.$router.push("/login");
+        }
       }
     },
     toggleTheme() {
