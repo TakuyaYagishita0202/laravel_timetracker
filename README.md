@@ -1,4 +1,4 @@
-<p align="center" style="font-size:60px"><img src='./public/svg/logo.svg' width="240"><br>Quitter</p>
+<p align="center"><img src='./public/svg/logo.svg' width="240"></p>
 
 ## 目次
 - [アプリケーションについて](https://github.com/TakuyaYagishita0202/laravel_timetracker#Quitter)
