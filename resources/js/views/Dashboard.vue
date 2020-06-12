@@ -73,7 +73,16 @@
         <v-tabs-items v-model="pie">
           <v-tab-item>
             <v-card>
-              <div class="py-4">
+              <div class="py-4" v-if="loading.pie">
+                <div class="echarts d-flex justify-center align-center">
+                  <vue-loading
+                    type="bars"
+                    color="#B0BEC5"
+                    :size="{ width: '50px', height: '50px' }"
+                  ></vue-loading>
+                </div>
+              </div>
+              <div class="py-4" v-else>
                 <chart :options="chartPie" autoresize v-if="!isEmpty(chartPie.series[0].data)"></chart>
                 <div v-else class="echarts">
                   <v-row align="center" justify="center">
@@ -100,7 +109,16 @@
         <v-tabs-items v-model="stack">
           <v-tab-item>
             <v-card>
-              <div class="py-4">
+              <div class="py-4" v-if="loading.stack">
+                <div class="echarts d-flex justify-center align-center">
+                  <vue-loading
+                    type="bars"
+                    color="#B0BEC5"
+                    :size="{ width: '50px', height: '50px' }"
+                  ></vue-loading>
+                </div>
+              </div>
+              <div class="py-4" v-else>
                 <chart
                   v-if="!isEmpty(this.chartStackWeek.series)"
                   :options="chartStackWeek"
@@ -154,6 +172,10 @@ export default {
   },
   data() {
     return {
+      loading: {
+        pie: true,
+        stack: true
+      },
       timers: {
         month: []
       },
@@ -416,6 +438,9 @@ export default {
           }
           // 表示する値
           this.chartPie.series[0].data = data;
+          this.loading.pie = false;
+        } else{
+          this.loading.pie = false;
         }
 
         /**
@@ -533,6 +558,10 @@ export default {
           }
           // 表示する値
           this.chartStackWeek.series = series;
+          this.loading.stack = false;
+        }
+        else{
+          this.loading.stack = false;
         }
       }
     }
